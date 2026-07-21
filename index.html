@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<title>Luba的窝</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="窝">
+<meta name="theme-color" content="#FBF5EC">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  --bg:#FBF5EC;
+  --ink:#3D3329;
+  --soft:#7A6E5F;
+  --faint:#A69A88;
+  --card:#FFFFFF;
+  --line:#EADFCE;
+  --sand:#F4E9D9;
+  --accent:#C98A4B;
+  --accent-deep:#A96D31;
+  --teal:#4A8C82;
+  --teal-soft:#E6F0EE;
+  --rose:#C97A63;
+  --rose-soft:#F8EAE4;
+  --lav:#8878A8;
+  --lav-soft:#EFEBF6;
+  --green:#5A8A5E;
+  --r:16px;
+  --shadow:0 2px 10px rgba(120,90,50,.07);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px;line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(74px + var(--safe-b));
+  overscroll-behavior-y:none;
+}
+#app{max-width:640px;margin:0 auto;padding:0 18px}
+
+/* ---- 顶栏 ---- */
+.top{
+  position:sticky;top:0;z-index:40;background:var(--bg);
+  padding:14px 0 10px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--line);margin-bottom:18px;
+}
+.top .cat{width:32px;height:32px;flex:0 0 auto}
+.top h1{font-size:17px;font-weight:700;flex:1}
+.top .date{font-size:13px;color:var(--faint);font-weight:500}
+
+/* ---- 屏幕 ---- */
+.screen{display:none;animation:in .3s ease}
+.screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sub{display:none}
+.sub.on{display:block;animation:in .28s ease}
+
+/* ---- 排版 ---- */
+h2{font-size:21px;line-height:1.4;margin-bottom:6px;font-weight:700}
+h3{font-size:16.5px;margin-bottom:8px;font-weight:700}
+p{margin-bottom:10px}
+.muted{color:var(--soft);font-size:14.5px}
+.tiny{color:var(--faint);font-size:12.5px;line-height:1.6}
+.hl{background:linear-gradient(transparent 62%,#F3DCBE 62%);font-weight:600}
+.center{text-align:center}
+hr.d{border:none;border-top:1px dashed var(--line);margin:24px 0}
+
+/* ---- 卡片 ---- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px;box-shadow:var(--shadow);margin-bottom:14px;
+}
+.card.sand{background:var(--sand)}
+.card.teal{background:var(--teal-soft);border-color:#D3E6E2}
+.card.rose{background:var(--rose-soft);border-color:#F0DBD3}
+.card.lav{background:var(--lav-soft);border-color:#E2DAF0}
+.card.flat{box-shadow:none}
+
+/* ---- 按钮 ---- */
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--accent);color:#fff;font-size:16px;font-weight:600;
+  padding:13px 26px;border-radius:99px;box-shadow:var(--shadow);
+  transition:opacity .15s;min-height:46px;
+}
+.btn:active{opacity:.78}
+.btn.wide{width:100%}
+.btn.ghost{background:transparent;color:var(--accent-deep);border:1.5px solid var(--accent);box-shadow:none}
+.btn.quiet{background:var(--sand);color:var(--ink);box-shadow:none;font-weight:500}
+.btn.sm{font-size:14px;padding:9px 16px;min-height:38px}
+.btn.teal{background:var(--teal)}
+.btn:disabled{opacity:.4}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.end{justify-content:flex-end}
+.row.between{justify-content:space-between;align-items:center}
+
+/* ---- 首页入口 ---- */
+.entry{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;box-shadow:var(--shadow);margin-bottom:11px;
+  transition:transform .12s;
+}
+.entry:active{transform:scale(.985)}
+.entry .em{font-size:25px;flex:0 0 auto;width:34px;text-align:center}
+.entry .tx{flex:1;min-width:0}
+.entry .tx b{display:block;font-size:16.5px;margin-bottom:1px}
+.entry .tx span{font-size:13.5px;color:var(--soft);display:block;line-height:1.5}
+.entry .go{color:var(--faint);font-size:20px;flex:0 0 auto}
+.entry.hero{background:linear-gradient(180deg,#FFF8EE,#FFFFFF);border-color:#E8D3B4}
+
+/* ---- 身体地图 ---- */
+.bodywrap{display:flex;justify-content:center;padding:6px 0 2px}
+.bodysvg{width:190px;max-width:60%;height:auto}
+.bz{fill:#F0E4D2;stroke:#DCCBB2;stroke-width:1.4;cursor:pointer;transition:fill .18s}
+.bz:active{fill:#EBD9BC}
+.bz.sel{fill:#E4A06A;stroke:#C98A4B}
+.bodylabel{text-align:center;font-size:14px;color:var(--soft);min-height:24px;margin-top:4px}
+
+/* ---- 情绪词 ---- */
+.wgroup{margin-bottom:14px}
+.wgroup .gt{font-size:13px;color:var(--faint);font-weight:700;margin-bottom:7px;letter-spacing:.5px}
+.words{display:flex;flex-wrap:wrap;gap:7px}
+.w{
+  font-size:15px;padding:8px 14px;border-radius:99px;
+  background:var(--card);border:1.5px solid var(--line);color:var(--ink);
+  transition:all .15s;line-height:1.4;
+}
+.w.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.w.g1.on{background:var(--lav);border-color:var(--lav)}
+.w.g2.on{background:var(--rose);border-color:var(--rose)}
+.w.g3.on{background:var(--teal);border-color:var(--teal)}
+.w.g4.on{background:#9A7C6A;border-color:#9A7C6A}
+.w.g5.on{background:#8C8577;border-color:#8C8577}
+.w.g6.on{background:var(--green);border-color:var(--green)}
+
+/* ---- 强度 ---- */
+.levels{display:flex;flex-direction:column;gap:8px}
+.lv{
+  text-align:left;padding:12px 16px;border-radius:12px;font-size:15.5px;
+  background:var(--card);border:1.5px solid var(--line);transition:all .15s;
+}
+.lv .n{font-size:12.5px;color:var(--faint);display:block}
+.lv.on{border-color:var(--accent);background:#FDF3E7;font-weight:600}
+.lv.on .n{color:var(--accent-deep)}
+
+/* ---- 输入 ---- */
+input[type=text],textarea,select{
+  font-family:inherit;font-size:16px;width:100%;
+  padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;
+  background:var(--card);color:var(--ink);outline:none;
+  -webkit-appearance:none;appearance:none;
+}
+input[type=text]:focus,textarea:focus{border-color:var(--teal)}
+textarea{min-height:130px;resize:vertical;line-height:1.7}
+textarea.tall{min-height:210px}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--faint) 50%),linear-gradient(135deg,var(--faint) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+label.fl{display:block;font-size:13.5px;color:var(--soft);font-weight:600;margin:12px 0 5px}
+
+/* ---- 底部导航(稳定,不变) ---- */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(251,245,236,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  padding:7px 6px calc(7px + var(--safe-b));
+  display:flex;
+}
+.nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:10.5px;color:var(--faint);padding:4px 2px;font-weight:600;
+}
+.nav button .i{font-size:20px;line-height:1}
+.nav button.on{color:var(--accent-deep)}
+
+/* ---- 记录条目 ---- */
+.log{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:12px 14px;margin-bottom:9px;font-size:14.5px;
+}
+.log .lt{font-size:12px;color:var(--faint);display:flex;justify-content:space-between;gap:8px;margin-bottom:3px}
+.log .del{color:var(--faint);font-size:15px;padding:0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.chip{font-size:12.5px;background:var(--sand);border-radius:99px;padding:2px 10px;color:var(--soft)}
+.empty{text-align:center;color:var(--faint);font-size:14px;padding:26px 10px;line-height:1.8}
+
+/* ---- 呼吸动画 ---- */
+.breathstage{
+  height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.orb{
+  width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#EFC79B,#D89A5E);
+  transition:transform 1s ease-in-out;
+}
+.breathtx{font-size:19px;font-weight:600;min-height:28px}
+.breathsub{font-size:13.5px;color:var(--faint);min-height:20px}
+
+/* ---- 证据强度标签 ---- */
+.ev{font-size:11.5px;border-radius:99px;padding:2px 9px;font-weight:700;display:inline-block;vertical-align:middle}
+.ev.strong{background:#E6F0E7;color:#40704A}
+.ev.mid{background:#FBF0DC;color:#946A24}
+.ev.weak{background:#F2EFEA;color:#7A6E5F}
+
+/* ---- 危机卡 ---- */
+.crisisbtn{
+  position:fixed;right:14px;bottom:calc(84px + var(--safe-b));z-index:45;
+  width:44px;height:44px;border-radius:50%;background:var(--card);
+  border:1.5px solid var(--line);box-shadow:0 3px 12px rgba(120,90,50,.16);
+  font-size:19px;display:flex;align-items:center;justify-content:center;
+}
+.sheet{
+  position:fixed;inset:0;z-index:80;background:rgba(61,51,41,.45);
+  display:none;align-items:flex-end;
+}
+.sheet.on{display:flex}
+.sheet .inner{
+  background:var(--bg);width:100%;max-height:88vh;overflow:auto;
+  border-radius:20px 20px 0 0;padding:22px 20px calc(26px + var(--safe-b));
+  animation:up .28s ease;
+}
+@keyframes up{from{transform:translateY(30px)}to{transform:none}}
+.crisis-item{
+  display:block;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;padding:14px 16px;margin-bottom:9px;
+  text-decoration:none;color:var(--ink);font-size:15.5px;
+}
+.crisis-item b{display:block}
+.crisis-item span{font-size:13px;color:var(--soft)}
+
+/* ---- Luba气泡 ---- */
+.luba{display:flex;gap:11px;align-items:flex-start;margin:16px 0}
+.luba .cat{width:40px;height:40px;flex:0 0 auto}
+.luba .bb{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:4px 15px 15px 15px;padding:11px 15px;font-size:15px;
+  box-shadow:var(--shadow);flex:1;
+}
+
+/* ---- 杂项 ---- */
+.toast{
+  position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%);
+  background:#3D3329;color:#fff;padding:10px 20px;border-radius:99px;
+  font-size:14.5px;z-index:90;box-shadow:0 5px 18px rgba(0,0,0,.24);
+  max-width:88%;text-align:center;
+}
+.stepdots{display:flex;gap:5px;margin-bottom:14px}
+.sd{height:3px;flex:1;background:var(--line);border-radius:99px}
+.sd.on{background:var(--accent)}
+.pre{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:14px;font-size:13px;line-height:1.75;white-space:pre-wrap;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;max-height:340px;overflow:auto;
+}
+details{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 16px;margin-bottom:9px}
+details summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;gap:7px;align-items:center}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸";color:var(--accent);transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+details .db{margin-top:9px;font-size:14.5px;color:var(--soft)}
+.danger{color:var(--rose);font-weight:600}
+footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);line-height:1.7}
+</style>
+</head>
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="cat" viewBox="0 0 100 100">
+    <path d="M22 38 L14 12 L36 24 Z" fill="#8A7258"/>
+    <path d="M78 38 L86 12 L64 24 Z" fill="#8A7258"/>
+    <path d="M24 36 L18 18 L34 27 Z" fill="#E9BFA0"/>
+    <path d="M76 36 L82 18 L66 27 Z" fill="#E9BFA0"/>
+    <ellipse cx="50" cy="58" rx="34" ry="31" fill="#A98E6C"/>
+    <path d="M40 30 Q41 38 39 43" stroke="#6E573E" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+    <path d="M50 28 Q50 36 50 42" stroke="#6E573E" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+    <path d="M60 30 Q59 38 61 43" stroke="#6E573E" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="68" rx="19" ry="13" fill="#F2E7D3"/>
+    <circle cx="38" cy="52" r="5" fill="#6F8F4A"/>
+    <circle cx="62" cy="52" r="5" fill="#6F8F4A"/>
+    <circle cx="38" cy="52" r="2.6" fill="#2C2418"/>
+    <circle cx="62" cy="52" r="2.6" fill="#2C2418"/>
+    <circle cx="39.4" cy="50.6" r="1.3" fill="#fff"/>
+    <circle cx="63.4" cy="50.6" r="1.3" fill="#fff"/>
+    <path d="M50 59 L47 63 L53 63 Z" fill="#D98A66"/>
+    <path d="M46 65 Q50 69 54 65" stroke="#3D3329" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <line x1="12" y1="56" x2="30" y2="58" stroke="#7A6248" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="12" y1="64" x2="30" y2="62" stroke="#7A6248" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="88" y1="56" x2="70" y2="58" stroke="#7A6248" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="88" y1="64" x2="70" y2="62" stroke="#7A6248" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+</svg>
+<div id="app">
+
+<header class="top">
+  <svg class="cat"><use href="#cat"/></svg>
+  <h1 id="topTitle">Luba的窝</h1>
+  <span class="date" id="topDate"></span>
+</header>
+
+<!-- ================= 首页 ================= -->
+<section class="screen on" id="home">
+  <div class="luba">
+    <svg class="cat"><use href="#cat"/></svg>
+    <div class="bb" id="lubaLine">今天不用做什么。进来待着也算。</div>
+  </div>
+
+  <button class="entry hero" data-go="checkin">
+    <span class="em">🫧</span>
+    <span class="tx"><b>一分钟 check-in</b><span>身体先说话,分析靠后。做完就结束,不给下一步。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="anger">
+    <span class="em">🌋</span>
+    <span class="tx"><b>愤怒专区</b><span>可以写得很难听。这里不劝你冷静。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="trail">
+    <span class="em">🏷</span>
+    <span class="tx"><b>Trailhead 便签</b><span>刚被炸到?20秒,四格,记完就走。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="calm">
+    <span class="em">🌬</span>
+    <span class="tx"><b>稳一稳</b><span>只放有证据的几样。用不用都行。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="eviRoom">
+    <span class="em">🗄</span>
+    <span class="tx"><b>证据柜</b><span>专门存反驳"失败=被替换"的实证。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="week">
+    <span class="em">📄</span>
+    <span class="tx"><b>周一那一页</b><span>把这一周变成能带去session的材料。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <div class="card sand flat" style="margin-top:16px">
+    <p class="tiny" style="margin:0">
+      🐾 这里<b>没有连续天数、没有分数、没有完成率</b>——研究显示这类东西对"失败=被替换"的系统只会加害。<br>
+      🔒 所有内容只存在这台设备的浏览器里,不上传任何地方。<br>
+      🍽 不追踪吃喝,一个字都不问。
+    </p>
+  </div>
+</section>
+
+<!-- ================= Check-in ================= -->
+<section class="screen" id="checkin">
+  <div class="stepdots" id="ciDots"></div>
+
+  <!-- 步骤1 身体 -->
+  <div class="sub on" id="ci1">
+    <h2>它在身体的哪里?</h2>
+    <p class="muted">点一下或几下。说不清就跳过——说不清也是答案。</p>
+    <div class="bodywrap">
+      <svg class="bodysvg" viewBox="0 0 120 250" xmlns="http://www.w3.org/2000/svg" aria-label="身体地图">
+        <ellipse class="bz" data-z="头" cx="60" cy="26" rx="20" ry="23"/>
+        <rect class="bz" data-z="喉咙" x="50" y="49" width="20" height="15" rx="7"/>
+        <path class="bz" data-z="胸口" d="M34 66 h52 a6 6 0 0 1 6 6 v34 a6 6 0 0 1 -6 6 h-52 a6 6 0 0 1 -6 -6 v-34 a6 6 0 0 1 6 -6 z"/>
+        <path class="bz" data-z="胃/肚子" d="M34 114 h52 a6 6 0 0 1 6 6 v36 a6 6 0 0 1 -6 6 h-52 a6 6 0 0 1 -6 -6 v-36 a6 6 0 0 1 6 -6 z"/>
+        <rect class="bz" data-z="肩颈背" x="14" y="66" width="12" height="52" rx="6"/>
+        <rect class="bz" data-z="手/手臂" x="94" y="66" width="12" height="52" rx="6"/>
+        <rect class="bz" data-z="腿/脚" x="38" y="170" width="18" height="66" rx="9"/>
+        <rect class="bz" data-z="全身" x="64" y="170" width="18" height="66" rx="9"/>
+      </svg>
+    </div>
+    <div class="bodylabel" id="ciBodyLabel">还没选</div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn quiet" data-ci="skip1">说不清 / 不在身体里</button>
+      <button class="btn" style="flex:1" data-ci="to2">下一步</button>
+    </div>
+    <p class="tiny" style="margin-top:14px">💡 为什么先问身体:有RCT发现,描述感受<b>在身体的什么位置</b>能实际降低"说不出情绪"的程度。对习惯用分析绕开感受的系统,这是最短的一条路。</p>
+  </div>
+
+  <!-- 步骤2 词 -->
+  <div class="sub" id="ci2">
+    <h2>叫它什么?</h2>
+    <p class="muted">选几个都行。词越准越有用——但选不出来就选"说不清"。</p>
+    <div id="ciWords"></div>
+    <label class="fl">想补一句(可选)</label>
+    <input type="text" id="ciNote" placeholder="一句话就够,不写也行">
+    <div class="row" style="margin-top:16px">
+      <button class="btn quiet" data-ci="back1">←</button>
+      <button class="btn" style="flex:1" data-ci="to3">下一步</button>
+    </div>
+  </div>
+
+  <!-- 步骤3 强度 -->
+  <div class="sub" id="ci3">
+    <h2>有多大?</h2>
+    <p class="muted">不是打分,是给它一个尺寸。</p>
+    <div class="levels" id="ciLevels"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn quiet" data-ci="back2">←</button>
+      <button class="btn" style="flex:1" data-ci="to4">下一步</button>
+    </div>
+  </div>
+
+  <!-- 步骤4 谁在开车 -->
+  <div class="sub" id="ci4">
+    <h2>现在谁在开车?</h2>
+    <p class="muted">可选。不确定是最常见的答案,选它一点不丢人。</p>
+    <div class="levels" id="ciDriver"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn quiet" data-ci="back3">←</button>
+      <button class="btn teal" style="flex:1" data-ci="save">记下来</button>
+    </div>
+  </div>
+
+  <!-- 完成 -->
+  <div class="sub" id="ci5">
+    <div class="center" style="padding:26px 0">
+      <p style="font-size:44px;margin-bottom:2px">🫧</p>
+      <h2>记下了。</h2>
+      <p class="muted" id="ciDoneLine">就这样,没有下一步。</p>
+      <svg class="cat" style="width:70px;height:70px;margin:14px 0"><use href="#cat"/></svg>
+      <div class="row" style="justify-content:center">
+        <button class="btn ghost sm" data-go="home">回窝里</button>
+        <button class="btn quiet sm" data-ci="restart">再记一条</button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="d">
+  <div class="row between">
+    <h3 style="margin:0">最近的记录</h3>
+    <button class="btn quiet sm" data-go="home">← 回首页</button>
+  </div>
+  <div id="ciLog"></div>
+</section>
+<!-- ================= 愤怒专区 ================= -->
+<section class="screen" id="anger">
+  <div class="sub on" id="ag0">
+    <h2>愤怒专区 🌋</h2>
+    <div class="card rose flat">
+      <p style="margin:0;font-size:15px"><b>先把定义换回来。</b><br>
+      你学到的"愤怒"是喊叫、是摔东西、是有人受伤——那是<b>你见过的版本</b>,不是愤怒本身。<br>
+      在IFS里,愤怒通常是个<b>保护者</b>:它站在某个更小、更疼的东西前面。它出现,说明有东西被踩到了。</p>
+    </div>
+    <p class="muted">这里三个入口,都不劝你冷静——冷静你已经练了二十多年了。</p>
+
+    <button class="entry" data-ag="letter">
+      <span class="em">✉️</span>
+      <span class="tx"><b>写一封不寄的信</b><span>写给谁都行。可以难听、可以不公平、可以骂人。没人会看。</span></span>
+      <span class="go">›</span>
+    </button>
+    <button class="entry" data-ag="ask">
+      <span class="em">🔦</span>
+      <span class="tx"><b>问问它在保护什么</b><span>四个问题,把愤怒当保护者访谈。</span></span>
+      <span class="go">›</span>
+    </button>
+    <button class="entry" data-ag="quick">
+      <span class="em">📌</span>
+      <span class="tx"><b>就记一笔</b><span>不想展开。记下强度和一句话就走。</span></span>
+      <span class="go">›</span>
+    </button>
+
+    <hr class="d">
+    <div class="row between"><h3 style="margin:0">愤怒记录</h3><span class="tiny" id="agCount"></span></div>
+    <div id="agLog"></div>
+  </div>
+
+  <!-- 不寄的信 -->
+  <div class="sub" id="agLetter">
+    <h2>不寄的信</h2>
+    <p class="muted">写给谁?(可以只写"某人")</p>
+    <input type="text" id="agTo" placeholder="收件人 · 不会寄出去">
+    <label class="fl">正文</label>
+    <textarea class="tall" id="agBody" placeholder="想写什么写什么。这里没有得体的要求。&#10;&#10;写完可以选择存起来,也可以选择——写完就烧掉,一个字不留。"></textarea>
+    <p class="tiny">⚠️ 说在前面:写完可能会有一阵子更难受,这是正常的,通常几小时内会过去。想停随时停,停下不算失败。</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn quiet" data-ag="back">←</button>
+      <button class="btn" style="flex:1" data-ag="saveLetter">存起来</button>
+      <button class="btn ghost" data-ag="burn">🔥 烧掉</button>
+    </div>
+  </div>
+
+  <!-- 保护者访谈 -->
+  <div class="sub" id="agAsk">
+    <h2>问问它</h2>
+    <p class="muted">四个问题。答一两个就够,不用全填。</p>
+    <label class="fl">1 · 它冲着谁 / 什么事来的?</label>
+    <input type="text" id="ask1" placeholder="一句话">
+    <label class="fl">2 · 如果它不出来,你怕会发生什么?</label>
+    <input type="text" id="ask2" placeholder="这题往往最有信息量">
+    <label class="fl">3 · 它站在什么前面?(它在保护哪个更小的东西)</label>
+    <input type="text" id="ask3" placeholder="委屈?害怕?被忽略?">
+    <label class="fl">4 · 它想让你知道什么?</label>
+    <input type="text" id="ask4" placeholder="让它说完">
+    <div class="row" style="margin-top:14px">
+      <button class="btn quiet" data-ag="back">←</button>
+      <button class="btn teal" style="flex:1" data-ag="saveAsk">记下来</button>
+    </div>
+    <p class="tiny" style="margin-top:12px">💡 如果第2、3题冒出来的东西很大、很小、很早——停在这儿,别往下挖。标记它,周一带给therapist。这不是胆小,这是IFS的标准流程。</p>
+  </div>
+
+  <!-- 快记 -->
+  <div class="sub" id="agQuick">
+    <h2>就记一笔</h2>
+    <label class="fl">多大?</label>
+    <div class="levels" id="agLevels"></div>
+    <label class="fl">一句话(可选)</label>
+    <input type="text" id="agQNote" placeholder="不写也行">
+    <div class="row" style="margin-top:14px">
+      <button class="btn quiet" data-ag="back">←</button>
+      <button class="btn teal" style="flex:1" data-ag="saveQuick">记下</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Trailhead 便签 ================= -->
+<section class="screen" id="trail">
+  <div class="sub on" id="tr0">
+    <h2>Trailhead 便签 🏷</h2>
+    <div class="card teal flat">
+      <p style="margin:0;font-size:15px"><b>判定公式:反应 &gt; 事件。</b><br>
+      一句不重的话让你一下午缓不过来——多出来的那部分,来自一个被踩到的part。<br>
+      现在不用处理它,<b>20秒记下来就行</b>。周日会自动汇总成带去session的材料。</p>
+    </div>
+    <button class="btn wide" data-tr="new">+ 记一个炸点</button>
+    <hr class="d">
+    <h3>已记下的</h3>
+    <div id="trLog"></div>
+  </div>
+
+  <div class="sub" id="trNew">
+    <h2>四格,20秒</h2>
+    <label class="fl">① 发生了什么(一句话)</label>
+    <input type="text" id="tr1" placeholder="比如:同事说了句「这个怎么还没好」">
+    <label class="fl">② 身体哪里有感觉</label>
+    <input type="text" id="tr2" placeholder="胸口 / 胃 / 喉咙 / 说不清">
+    <label class="fl">③ 反应有多大(1–10)</label>
+    <input type="text" id="tr3" inputmode="numeric" placeholder="凭感觉,不用准">
+    <label class="fl">④ 这个反应像谁(可选)</label>
+    <input type="text" id="tr4" placeholder="认识这个part吗?不认识就空着">
+    <div class="row" style="margin-top:14px">
+      <button class="btn quiet" data-tr="back">←</button>
+      <button class="btn teal" style="flex:1" data-tr="save">记下,走人</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 稳一稳 ================= -->
+<section class="screen" id="calm">
+  <div class="sub on" id="cm0">
+    <h2>稳一稳 🌬</h2>
+    <p class="muted">只提供,不推销。这里不会出现"你应该冷静一下"。</p>
+
+    <button class="entry" data-cm="sigh">
+      <span class="em">😮‍💨</span>
+      <span class="tx"><b>生理性叹息</b><span>两次吸气 + 一次长呼气 · <span class="ev mid">证据:中等 · RCT</span></span></span>
+      <span class="go">›</span>
+    </button>
+    <button class="entry" data-cm="slow">
+      <span class="em">🌊</span>
+      <span class="tx"><b>慢呼气(4进6出)</b><span>呼气比吸气长 · <span class="ev strong">证据:较强 · meta分析</span></span></span>
+      <span class="go">›</span>
+    </button>
+    <button class="entry" data-cm="orient">
+      <span class="em">👀</span>
+      <span class="tx"><b>环视定向</b><span>慢慢转头看一圈 · <span class="ev weak">证据:弱 · 临床常用</span></span></span>
+      <span class="go">›</span>
+    </button>
+    <button class="entry" data-cm="54321">
+      <span class="em">✋</span>
+      <span class="tx"><b>5-4-3-2-1</b><span>感官落地法 · <span class="ev weak">证据:弱 · 仅1个无对照研究</span></span></span>
+      <span class="go">›</span>
+    </button>
+
+    <div class="card sand flat" style="margin-top:14px">
+      <p class="tiny" style="margin:0"><b>为什么标注证据强度:</b>网上流传的grounding技巧里,真正有像样研究支持的其实不多。标出来,你自己判断要不要用——有效对你就是有效,弱证据不等于没用,只是别人没证明过。</p>
+    </div>
+    <div class="card rose flat">
+      <p class="tiny" style="margin:0"><b>这里刻意没有放的东西:</b>攥冰块、弹橡皮筋、冷水冲击这类"靠疼痛/刺激"的方法。临床文献是<b>明确不建议</b>的——它和自伤共用同一个机制,只是换了包装。如果哪天很想用这类方法,那本身是值得直接告诉therapist的一条信息。</p>
+    </div>
+  </div>
+
+  <div class="sub" id="cmRun">
+    <h2 id="cmTitle"></h2>
+    <p class="muted" id="cmDesc"></p>
+    <div class="breathstage">
+      <div class="orb" id="cmOrb"></div>
+      <div class="breathtx" id="cmTx">准备好了就开始</div>
+      <div class="breathsub" id="cmSub"></div>
+    </div>
+    <div class="row" style="justify-content:center">
+      <button class="btn" id="cmStart">开始</button>
+      <button class="btn quiet" data-cm="back">停下 / 返回</button>
+    </div>
+    <p class="tiny center" style="margin-top:14px">随时可以停。停下不需要理由。</p>
+  </div>
+
+  <div class="sub" id="cmText">
+    <h2 id="cmTTitle"></h2>
+    <div class="card" id="cmTBody"></div>
+    <button class="btn quiet wide" data-cm="back">← 返回</button>
+  </div>
+</section>
+<!-- ================= 证据柜 ================= -->
+<section class="screen" id="eviRoom">
+  <div class="sub on" id="ev0">
+    <h2>证据柜 🗄</h2>
+    <div class="card lav flat">
+      <p style="margin:0;font-size:15px"><b>为什么要有这么个柜子。</b><br>
+      你的系统有个默认设置:<b>符合"我不行 / 失败=被替换"的证据自动归档,反面的证据自动删除。</b>
+      光记录难受的时刻,等于只给一边补货。<br>
+      所以这里专门存反面的:你做到的、你judgment对了的、你开口了的、你没塌的。<b>不计数,不打分</b>——就是个柜子。</p><p style="margin:10px 0 0;font-size:14px"><b>我先放了 7 条,都写成了简写。</b>每一条你都知道指什么;别人读到只会觉得莫名其妙——这个页面挂在公开网址上,你的事不该让人看懂。往里加新的,建议也这么写。</p>
+    </div>
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn" style="flex:1" data-ev="new">+ 存一条</button>
+      <button class="btn ghost" data-ev="rand">🎲 随便翻一条</button>
+    </div>
+    <div id="evPick"></div>
+    <hr class="d">
+    <h3>柜子里的</h3>
+    <div id="evLog"></div>
+  </div>
+
+  <div class="sub" id="evNew">
+    <h2>存一条</h2>
+    <label class="fl">发生了什么</label>
+    <textarea id="evText" placeholder="写简写,只要你自己看得懂。&#10;&#10;「今天说了一次不」也算。&#10;「难受的时候开口了」也算。&#10;「注意到自己在抢答」也算。"></textarea>
+    <label class="fl">它反驳的是哪条旧信念?(可选)</label>
+    <select id="evTag">
+      <option value="">— 不用选 —</option>
+      <option>失败 = 会被替换</option>
+      <option>我不能有需求</option>
+      <option>我怎么这么傻</option>
+      <option>我表达愤怒 = 我很糟</option>
+      <option>我必须完美才安全</option>
+      <option>别人figured out,只有我一团糟</option>
+      <option>我说了也没人听</option>
+    </select>
+    <div class="row" style="margin-top:14px">
+      <button class="btn quiet" data-ev="back">←</button>
+      <button class="btn teal" style="flex:1" data-ev="save">存进柜子</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 周一那一页 ================= -->
+<section class="screen" id="week">
+  <h2>周一那一页 📄</h2>
+  <p class="muted">把这一周的记录变成能带去session的材料。这不是成绩单——上面<b>没有任何数字是用来评价你的</b>,只是提醒你都发生过什么。</p>
+
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn" style="flex:1" data-wk="gen">生成这一周</button>
+    <button class="btn ghost" data-wk="gen14">近两周</button>
+  </div>
+
+  <div id="wkOut"></div>
+
+  <hr class="d">
+  <h3>数据(全在你手里)</h3>
+  <details>
+    <summary>🔐 这些东西存在哪儿</summary>
+    <div class="db">
+      <p>全部存在<b>这台设备的浏览器本地</b>(localStorage)。不上传、不同步、没有服务器、我也看不到。</p>
+      <p>代价是:换设备看不到、清浏览器数据会没、iOS长期不用有可能被系统清理。所以——<b>偶尔导出一次备份</b>比什么都实在。</p>
+      <p>另外说句实话:因为这个页面挂在公开网址上,<b>页面代码是公开的,但你的记录不是</b>。别人打开这个链接,看到的是一个空壳。</p>
+    </div>
+  </details>
+  <div class="row" style="margin-top:10px">
+    <button class="btn quiet sm" data-wk="export">⬇︎ 导出备份</button>
+    <button class="btn quiet sm" data-wk="import">⬆︎ 导入备份</button>
+    <button class="btn quiet sm danger" data-wk="wipe">全部删除</button>
+  </div>
+  <input type="file" id="wkFile" accept="application/json,.json" style="display:none">
+
+  <hr class="d">
+  <h3>我的联系人(存本地)</h3>
+  <p class="muted" style="font-size:14px">填了之后,危机卡里就能一键拨号。</p>
+  <label class="fl">Therapist</label>
+  <input type="text" id="cfgTher" placeholder="姓名 + 电话">
+  <label class="fl">EAP</label>
+  <input type="text" id="cfgEap" placeholder="电话或案号">
+  <label class="fl">想找的人(朋友/家人)</label>
+  <input type="text" id="cfgFriend" placeholder="谁都行,写一个">
+  <div class="row" style="margin-top:12px"><button class="btn teal sm" data-wk="saveCfg">保存联系人</button></div>
+
+  <footer>
+    <p><b>这是什么:</b>一个基于你therapist的IFS材料 + 公开研究做的自助工具。<b>不是治疗,不替代therapist。</b>
+    IFS本身的研究基础仍在早期(整个文献里只有2个RCT),而"用app做IFS"这件事<b>目前零研究</b>——所以这里只做保护者层面的工作,不碰exile、不做卸担。</p>
+    <p style="margin-top:6px"><b>刻意没做的:</b>连续天数/评分/完成率 · 饮食追踪 · AI扮演你的parts跟你聊天 · 自动风险检测。最后两项是现在市面上IFS app的通行做法,也是最没法辩护的两项。</p>
+    <p style="margin-top:6px">危机资源不设条件、永远在右下角那个按钮里。美国境内:<b>988</b>(电话/短信/在线聊天,24小时)。有立即危险打 <b>911</b>。</p>
+  </footer>
+</section>
+
+</div><!-- /#app -->
+
+<!-- ================= 底部导航 ================= -->
+<nav class="nav" id="nav">
+  <button data-go="home" data-nav="home"><span class="i">🏠</span>窝</button>
+  <button data-go="checkin" data-nav="checkin"><span class="i">🫧</span>check-in</button>
+  <button data-go="anger" data-nav="anger"><span class="i">🌋</span>愤怒</button>
+  <button data-go="calm" data-nav="calm"><span class="i">🌬</span>稳一稳</button>
+  <button data-go="week" data-nav="week"><span class="i">📄</span>周一</button>
+</nav>
+
+<button class="crisisbtn" id="crisisBtn" aria-label="紧急联系">🆘</button>
+
+<div class="sheet" id="crisisSheet">
+  <div class="inner">
+    <div class="row between" style="margin-bottom:12px">
+      <h2 style="margin:0">现在需要人</h2>
+      <button class="btn quiet sm" id="crisisClose">关闭</button>
+    </div>
+    <p class="muted">这里一直在,不需要满足任何条件才能点开。</p>
+    <a class="crisis-item" href="tel:988"><b>📞 988 · 打电话</b><span>全美24小时心理危机热线,免费</span></a>
+    <a class="crisis-item" href="sms:988"><b>💬 988 · 发短信</b><span>不想说话的时候用这个</span></a>
+    <a class="crisis-item" href="https://988lifeline.org/chat/" target="_blank" rel="noopener"><b>🖥 988 · 在线聊天</b><span>988lifeline.org/chat</span></a>
+    <div id="crisisMine"></div>
+    <a class="crisis-item" href="tel:911"><b>🚑 911</b><span>有立即危险的时候</span></a>
+    <p class="tiny" style="margin-top:12px">这个app<b>不会</b>自动检测你的状态、不会替你判断风险、也不会替你联系任何人——那不是软件能做好的事。要用,由你按。</p>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+
+/* ================= 数据 ================= */
+var KEY="luba_nook_v1";
+var db={checkins:[],anger:[],trails:[],evidence:[],cfg:{},seeded:false};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object")db=Object.assign(db,p);}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){toast("存不下了 · 可能空间满了,导出备份后清理一下");}}
+function uid(){return Date.now()+"_"+Math.random().toString(36).slice(2,7);}
+function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
+
+/* 首次预置证据柜 —— 写成只有她看得懂的简写 */
+if(!db.seeded){
+  db.seeded=true;
+  var seed=[
+    {t:"我比所有人都先知道。",g:"我怎么这么傻"},
+    {t:"生病那次,我开的口。",g:"我不能有需求"},
+    {t:"我没有全咽回去。",g:"我表达愤怒 = 我很糟"},
+    {t:"红线表是我自己写的。",g:"失败 = 会被替换"},
+    {t:"我说了一次不,并且把话说完了。",g:"我说了也没人听"},
+    {t:"两次,并排摆着看。",g:"别人figured out,只有我一团糟"},
+    {t:"桌子底下那座城堡。",g:"我必须完美才安全"}
+  ];
+  seed.forEach(function(s,i){db.evidence.push({id:uid(),ts:Date.now()-(6-i)*86400000,text:s.t,tag:s.g,seed:true});});
+  save();
+}
+
+/* ================= 工具 ================= */
+function toast(msg){
+  var t=document.createElement("div");t.className="toast";t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.opacity="0";t.style.transition="opacity .45s";},2100);
+  setTimeout(function(){t.remove();},2650);
+}
+function fmt(ts){
+  var d=new Date(ts),n=new Date();
+  var sameDay=d.toDateString()===n.toDateString();
+  var y=new Date(n.getTime()-86400000).toDateString()===d.toDateString();
+  var hm=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  if(sameDay)return "今天 "+hm;
+  if(y)return "昨天 "+hm;
+  return (d.getMonth()+1)+"/"+d.getDate()+" "+hm;
+}
+function shortDate(ts){var d=new Date(ts);return (d.getMonth()+1)+"/"+d.getDate();}
+
+/* ================= 路由 ================= */
+var TITLES={home:"Luba的窝",checkin:"check-in",anger:"愤怒专区",trail:"Trailhead",calm:"稳一稳",eviRoom:"证据柜",week:"周一那一页"};
+function go(id){
+  $$(".screen").forEach(function(s){s.classList.remove("on");});
+  var el=document.getElementById(id);if(el)el.classList.add("on");
+  $("#topTitle").textContent=TITLES[id]||"Luba的窝";
+  $$("#nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-nav")===id);});
+  window.scrollTo({top:0});
+  if(id==="checkin"){ciReset();renderCiLog();}
+  if(id==="anger"){subAnger("ag0");renderAgLog();}
+  if(id==="trail"){subTrail("tr0");renderTrLog();}
+  if(id==="calm"){stopBreath();subCalm("cm0");}
+  if(id==="eviRoom"){subEvi("ev0");renderEvLog();$("#evPick").innerHTML="";}
+  if(id==="week"){loadCfg();}
+}
+document.addEventListener("click",function(ev){
+  var t=ev.target.closest("[data-go]");
+  if(t){go(t.getAttribute("data-go"));}
+});
+
+/* ================= Luba 台词(每次打开轮换) ================= */
+var LINES=[
+ "今天不用做什么。进来待着也算。",
+ "本猫的专业意见:躺着也是一种生产力。",
+ "没有连续天数要维护。你想哪天来就哪天来。",
+ "你上次开口要人照顾,是件挺大的事。我记着呢。",
+ "如果现在什么都不想记——那就什么都不记,这页可以直接关掉。",
+ "提醒一下:这里没有分数。翻遍了也找不到。",
+ "情绪不需要理由才能进场。它来了就是对的。",
+ "「说不清」是一个完整的答案,不是逃避。",
+ "你不是 mess,你是工地。墙开着的时候当然乱。",
+ "本猫从不问你今天吃了什么。这是原则。",
+ "累了就把手机扣过去。窝一直在这儿,不会关门。",
+ "做到一半停下,在这儿不算没做完,算做了一半。",
+ "你今天已经在应付一些别人看不见的事了。",
+ "护士模式关掉一会儿。这里没人需要你照顾,包括我。",
+ "Luba说:如果实在没力气,就只点一下身体图,然后走。也算。"
+];
+$("#lubaLine").textContent=LINES[Math.floor(Math.random()*LINES.length)];
+var d0=new Date();
+$("#topDate").textContent=(d0.getMonth()+1)+"/"+d0.getDate()+" "+["周日","周一","周二","周三","周四","周五","周六"][d0.getDay()];
+
+/* ================= CHECK-IN ================= */
+var WORDS=[
+ {g:"g1",t:"难过系",w:["失落","委屈","心疼","空","想哭","孤单","被丢下","闷","灰"]},
+ {g:"g2",t:"生气系",w:["烦","不爽","火大","被冒犯","憋屈","想砸东西","气到发抖","恨"]},
+ {g:"g3",t:"害怕系",w:["紧张","不安","发怵","慌","如临大敌","警觉","怕"]},
+ {g:"g4",t:"羞耻系",w:["难为情","想消失","觉得自己有问题","内疚","丢脸"]},
+ {g:"g5",t:"累/空系",w:["累","麻","没劲","空转","不想动","耗光了","卡住"]},
+ {g:"g6",t:"亮一点的",w:["轻松","安","有意思","暖","被接住","有劲","想笑","踏实"]},
+ {g:"",t:"其它",w:["说不清","很多种混在一起","堵着","身体不舒服"]}
+];
+var LEVELS=[
+ {v:1,t:"几乎没有",n:"背景音,不吵"},
+ {v:2,t:"有一点",n:"能注意到,不影响事"},
+ {v:3,t:"挺明显",n:"一直在,绕不开"},
+ {v:4,t:"很大",n:"占了大部分注意力"},
+ {v:5,t:"淹没了",n:"现在只有它"}
+];
+var DRIVERS=[
+ {v:"self",t:"🚌 Self 在开车",n:"松的、好奇的、不着急"},
+ {v:"stable",t:"🎭 像个很稳的 part",n:"稳,但绷着 · 底下有个「必须」"},
+ {v:"blend",t:"🌊 某个 part 上头了",n:"我=这个情绪本身"},
+ {v:"unk",t:"❓ 说不清",n:"最常见的答案"}
+];
+var ci={body:[],words:[],level:null,driver:null};
+
+function ciReset(){
+  ci={body:[],words:[],level:null,driver:null};
+  $$("#checkin .bz").forEach(function(z){z.classList.remove("sel");});
+  $("#ciBodyLabel").textContent="还没选";
+  $("#ciNote").value="";
+  ciSub("ci1");
+}
+function ciSub(id){
+  $$("#checkin .sub").forEach(function(s){s.classList.remove("on");});
+  var el=document.getElementById(id);if(el)el.classList.add("on");
+  var idx=["ci1","ci2","ci3","ci4","ci5"].indexOf(id);
+  $("#ciDots").innerHTML=[0,1,2,3].map(function(i){return '<span class="sd'+(i<=idx&&idx<4?" on":"")+'"></span>';}).join("");
+  $("#ciDots").style.display=idx>=4?"none":"flex";
+  window.scrollTo({top:0});
+}
+$$("#checkin .bz").forEach(function(z){
+  z.addEventListener("click",function(){
+    var name=z.getAttribute("data-z");
+    var i=ci.body.indexOf(name);
+    if(i>=0){ci.body.splice(i,1);z.classList.remove("sel");}
+    else{ci.body.push(name);z.classList.add("sel");}
+    $("#ciBodyLabel").textContent=ci.body.length?ci.body.join(" · "):"还没选";
+  });
+});
+(function(){
+  $("#ciWords").innerHTML=WORDS.map(function(grp){
+    return '<div class="wgroup"><div class="gt">'+grp.t+'</div><div class="words">'+
+      grp.w.map(function(w){return '<button class="w '+grp.g+'" data-w="'+esc(w)+'">'+esc(w)+'</button>';}).join("")+
+      '</div></div>';
+  }).join("");
+  $("#ciWords").addEventListener("click",function(e){
+    var b=e.target.closest(".w");if(!b)return;
+    var w=b.getAttribute("data-w");
+    var i=ci.words.indexOf(w);
+    if(i>=0){ci.words.splice(i,1);b.classList.remove("on");}
+    else{ci.words.push(w);b.classList.add("on");}
+  });
+  $("#ciLevels").innerHTML=LEVELS.map(function(l){
+    return '<button class="lv" data-lv="'+l.v+'">'+l.t+'<span class="n">'+l.n+'</span></button>';
+  }).join("");
+  $("#ciLevels").addEventListener("click",function(e){
+    var b=e.target.closest(".lv");if(!b)return;
+    ci.level=Number(b.getAttribute("data-lv"));
+    $$("#ciLevels .lv").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+  });
+  $("#ciDriver").innerHTML=DRIVERS.map(function(d){
+    return '<button class="lv" data-dr="'+d.v+'">'+d.t+'<span class="n">'+d.n+'</span></button>';
+  }).join("");
+  $("#ciDriver").addEventListener("click",function(e){
+    var b=e.target.closest(".lv");if(!b)return;
+    ci.driver=b.getAttribute("data-dr");
+    $$("#ciDriver .lv").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+  });
+})();
+$("#checkin").addEventListener("click",function(e){
+  var b=e.target.closest("[data-ci]");if(!b)return;
+  var a=b.getAttribute("data-ci");
+  if(a==="skip1"){ci.body=[];$$("#checkin .bz").forEach(function(z){z.classList.remove("sel");});$("#ciBodyLabel").textContent="说不清";ciSub("ci2");}
+  if(a==="to2")ciSub("ci2");
+  if(a==="to3")ciSub("ci3");
+  if(a==="to4")ciSub("ci4");
+  if(a==="back1")ciSub("ci1");
+  if(a==="back2")ciSub("ci2");
+  if(a==="back3")ciSub("ci3");
+  if(a==="restart")ciReset();
+  if(a==="save"){
+    var rec={id:uid(),ts:Date.now(),body:ci.body.slice(),words:ci.words.slice(),
+             note:$("#ciNote").value.trim(),level:ci.level,driver:ci.driver};
+    if(!rec.body.length&&!rec.words.length&&!rec.note&&!rec.level){toast("空的也可以存,但要不要至少点一下身体图?");return;}
+    db.checkins.unshift(rec);save();
+    var lines=["就这样,没有下一步。","记完了。这条不用你再管。","存好了。剩下的时间是你的。","收到。窝里不需要交作业。"];
+    if(rec.level===5)lines=["记下了。淹没的时候,能来记一笔已经很多了。","收到。现在这个大小,不需要你再多做任何事。"];
+    if(rec.level===1)lines=["记下了。小的也算数——顺便说,研究发现强度低的时候硬去分析反而会更难受,所以到此为止刚好。"];
+    if(rec.driver==="blend")lines=["记下了。上头的时候能说出「有个部分在上头」——那句话本身就是从驾驶座说的。"];
+    $("#ciDoneLine").textContent=lines[Math.floor(Math.random()*lines.length)];
+    ciSub("ci5");renderCiLog();
+  }
+});
+function renderCiLog(){
+  var el=$("#ciLog");
+  if(!db.checkins.length){el.innerHTML='<div class="empty">还没有记录。<br>不着急,这里不催。</div>';return;}
+  el.innerHTML=db.checkins.slice(0,25).map(function(r){
+    var lv=LEVELS.filter(function(l){return l.v===r.level;})[0];
+    var dr=DRIVERS.filter(function(d){return d.v===r.driver;})[0];
+    return '<div class="log"><div class="lt"><span>'+fmt(r.ts)+(lv?" · "+esc(lv.t):"")+'</span><button class="del" data-del="ci:'+r.id+'">✕</button></div>'+
+      (r.body.length?'<div>📍 '+esc(r.body.join(" · "))+'</div>':"")+
+      (r.words.length?'<div class="chips">'+r.words.map(function(w){return '<span class="chip">'+esc(w)+'</span>';}).join("")+'</div>':"")+
+      (r.note?'<div style="margin-top:5px">'+esc(r.note)+'</div>':"")+
+      (dr?'<div class="tiny" style="margin-top:4px">'+esc(dr.t)+'</div>':"")+
+      '</div>';
+  }).join("");
+}
+
+/* ================= 愤怒专区 ================= */
+function subAnger(id){$$("#anger .sub").forEach(function(s){s.classList.remove("on");});document.getElementById(id).classList.add("on");window.scrollTo({top:0});}
+var agLevel=null;
+$("#agLevels").innerHTML=LEVELS.map(function(l){return '<button class="lv" data-lv="'+l.v+'">'+l.t+'<span class="n">'+l.n+'</span></button>';}).join("");
+$("#agLevels").addEventListener("click",function(e){
+  var b=e.target.closest(".lv");if(!b)return;
+  agLevel=Number(b.getAttribute("data-lv"));
+  $$("#agLevels .lv").forEach(function(x){x.classList.remove("on");});b.classList.add("on");
+});
+$("#anger").addEventListener("click",function(e){
+  var b=e.target.closest("[data-ag]");if(!b)return;
+  var a=b.getAttribute("data-ag");
+  if(a==="letter"){$("#agTo").value="";$("#agBody").value="";subAnger("agLetter");}
+  if(a==="ask"){["ask1","ask2","ask3","ask4"].forEach(function(i){$("#"+i).value="";});subAnger("agAsk");}
+  if(a==="quick"){agLevel=null;$$("#agLevels .lv").forEach(function(x){x.classList.remove("on");});$("#agQNote").value="";subAnger("agQuick");}
+  if(a==="back")subAnger("ag0");
+  if(a==="saveLetter"){
+    var body=$("#agBody").value.trim();
+    if(!body){toast("还没写内容");return;}
+    db.anger.unshift({id:uid(),ts:Date.now(),type:"letter",to:$("#agTo").value.trim(),body:body});
+    save();subAnger("ag0");renderAgLog();toast("存好了。想删随时删。");
+  }
+  if(a==="burn"){
+    var had=$("#agBody").value.trim();
+    if(!had){toast("还没写东西");return;}
+    db.anger.unshift({id:uid(),ts:Date.now(),type:"burned",to:$("#agTo").value.trim()});
+    save();$("#agBody").value="";$("#agTo").value="";
+    subAnger("ag0");renderAgLog();
+    toast("🔥 烧掉了。内容一个字都没留下,只记了「你写过」。");
+  }
+  if(a==="saveAsk"){
+    var r={id:uid(),ts:Date.now(),type:"ask",a1:$("#ask1").value.trim(),a2:$("#ask2").value.trim(),a3:$("#ask3").value.trim(),a4:$("#ask4").value.trim()};
+    if(!r.a1&&!r.a2&&!r.a3&&!r.a4){toast("四个都空着,先答一个?");return;}
+    db.anger.unshift(r);save();subAnger("ag0");renderAgLog();toast("记下了。这几条很适合周一带过去。");
+  }
+  if(a==="saveQuick"){
+    db.anger.unshift({id:uid(),ts:Date.now(),type:"quick",level:agLevel,note:$("#agQNote").value.trim()});
+    save();subAnger("ag0");renderAgLog();toast("记下了。");
+  }
+});
+function renderAgLog(){
+  var el=$("#agLog");
+  $("#agCount").textContent=db.anger.length?db.anger.length+" 条":"";
+  if(!db.anger.length){el.innerHTML='<div class="empty">还没有记录。<br>愤怒来的时候,这儿一直开着。</div>';return;}
+  el.innerHTML=db.anger.slice(0,25).map(function(r){
+    var head='<div class="lt"><span>'+fmt(r.ts)+'</span><button class="del" data-del="ag:'+r.id+'">✕</button></div>';
+    if(r.type==="letter")return '<div class="log">'+head+'<div>✉️ 给'+esc(r.to||"某人")+'的信</div><div class="tiny" style="margin-top:4px;white-space:pre-wrap">'+esc(r.body.slice(0,90))+(r.body.length>90?"…":"")+'</div></div>';
+    if(r.type==="burned")return '<div class="log">'+head+'<div>🔥 写了一封给'+esc(r.to||"某人")+'的信,烧掉了</div><div class="tiny">内容未保存 —— 这是你选的</div></div>';
+    if(r.type==="ask")return '<div class="log">'+head+'<div>🔦 保护者访谈</div>'+
+      (r.a1?'<div class="tiny">冲着:'+esc(r.a1)+'</div>':"")+
+      (r.a2?'<div class="tiny">怕:'+esc(r.a2)+'</div>':"")+
+      (r.a3?'<div class="tiny">站在什么前面:'+esc(r.a3)+'</div>':"")+
+      (r.a4?'<div class="tiny">想让我知道:'+esc(r.a4)+'</div>':"")+'</div>';
+    var lv=LEVELS.filter(function(l){return l.v===r.level;})[0];
+    return '<div class="log">'+head+'<div>📌 '+(lv?esc(lv.t):"记了一笔")+'</div>'+(r.note?'<div class="tiny">'+esc(r.note)+'</div>':"")+'</div>';
+  }).join("");
+}
+
+/* ================= Trailhead ================= */
+function subTrail(id){$$("#trail .sub").forEach(function(s){s.classList.remove("on");});document.getElementById(id).classList.add("on");window.scrollTo({top:0});}
+$("#trail").addEventListener("click",function(e){
+  var b=e.target.closest("[data-tr]");if(!b)return;
+  var a=b.getAttribute("data-tr");
+  if(a==="new"){["tr1","tr2","tr3","tr4"].forEach(function(i){$("#"+i).value="";});subTrail("trNew");}
+  if(a==="back")subTrail("tr0");
+  if(a==="save"){
+    var r={id:uid(),ts:Date.now(),event:$("#tr1").value.trim(),body:$("#tr2").value.trim(),size:$("#tr3").value.trim(),part:$("#tr4").value.trim()};
+    if(!r.event&&!r.body){toast("至少写一格?");return;}
+    db.trails.unshift(r);save();subTrail("tr0");renderTrLog();toast("记下了。走人。");
+  }
+});
+function renderTrLog(){
+  var el=$("#trLog");
+  if(!db.trails.length){el.innerHTML='<div class="empty">还没有便签。<br>下次被炸到的时候再来。</div>';return;}
+  el.innerHTML=db.trails.slice(0,25).map(function(r){
+    return '<div class="log"><div class="lt"><span>'+fmt(r.ts)+(r.size?" · 大小 "+esc(r.size):"")+'</span><button class="del" data-del="tr:'+r.id+'">✕</button></div>'+
+      (r.event?'<div>'+esc(r.event)+'</div>':"")+
+      '<div class="chips">'+(r.body?'<span class="chip">📍'+esc(r.body)+'</span>':"")+(r.part?'<span class="chip">像:'+esc(r.part)+'</span>':"")+'</div></div>';
+  }).join("");
+}
+
+/* ================= 稳一稳 ================= */
+function subCalm(id){$$("#calm .sub").forEach(function(s){s.classList.remove("on");});document.getElementById(id).classList.add("on");window.scrollTo({top:0});}
+var breathTimer=null,breathT0=0;
+var PROTO={
+  sigh:{title:"生理性叹息 😮‍💨",desc:"吸一口 → 再吸一小口把肺撑满 → 长长地呼出去。斯坦福 2023 的 RCT 里,每天 5 分钟这个,在情绪改善上胜过盒式呼吸和正念冥想。",
+        steps:[{t:"吸气",s:"用鼻子,吸满",d:2000,scale:1.42},{t:"再吸一小口",s:"顶到最满",d:1100,scale:1.6},{t:"长长呼出",s:"用嘴,慢慢放掉",d:6000,scale:0.85},{t:"停一下",s:"",d:1200,scale:0.85}]},
+  slow:{title:"慢呼气 4 进 6 出 🌊",desc:"关键不是深呼吸,是「呼气比吸气长」。12 个 RCT 的 meta 分析显示,呼吸调节对压力、焦虑、抑郁都有中等偏小的显著效果。",
+        steps:[{t:"吸气",s:"数 4 拍",d:4000,scale:1.5},{t:"呼气",s:"数 6 拍,慢慢来",d:6000,scale:0.85}]}
+};
+function stopBreath(){
+  if(breathTimer){clearTimeout(breathTimer);breathTimer=null;}
+  var o=$("#cmOrb");if(o)o.style.transform="scale(1)";
+  var s=$("#cmStart");if(s)s.textContent="开始";
+}
+function runBreath(key){
+  var proto=PROTO[key],i=0;
+  breathT0=Date.now();
+  $("#cmStart").textContent="进行中…";
+  (function step(){
+    var st=proto.steps[i%proto.steps.length];
+    $("#cmTx").textContent=st.t;
+    var mins=Math.floor((Date.now()-breathT0)/60000),secs=Math.floor((Date.now()-breathT0)/1000)%60;
+    $("#cmSub").textContent=(st.s?st.s+" · ":"")+"已经 "+mins+"分"+String(secs).padStart(2,"0")+"秒";
+    var orb=$("#cmOrb");
+    orb.style.transitionDuration=(st.d/1000)+"s";
+    orb.style.transform="scale("+st.scale+")";
+    i++;
+    breathTimer=setTimeout(step,st.d);
+  })();
+}
+$("#calm").addEventListener("click",function(e){
+  var b=e.target.closest("[data-cm]");if(!b)return;
+  var a=b.getAttribute("data-cm");
+  if(a==="back"){stopBreath();subCalm("cm0");return;}
+  if(a==="sigh"||a==="slow"){
+    stopBreath();
+    var p=PROTO[a];
+    $("#cmTitle").textContent=p.title;$("#cmDesc").textContent=p.desc;
+    $("#cmTx").textContent="准备好了就开始";$("#cmSub").textContent="";
+    $("#cmStart").setAttribute("data-proto",a);
+    subCalm("cmRun");return;
+  }
+  if(a==="orient"||a==="54321"){
+    var TXT={
+      orient:{h:"环视定向 👀",b:'<p>不是任务,是让眼睛做它本来会做的事。</p><p><b>怎么做:</b>慢慢地、真的很慢地转头,从左扫到右。让视线自己停在想停的地方,停几秒,再继续。转三四个来回就够。</p><p>如果身体自己叹了口气、肩膀掉下来一点——那就是它想要的。没有也没关系。</p><p class="tiny" style="margin-top:10px"><span class="ev weak">证据:弱</span> 创伤治疗里常用,但作为单独技巧没有专门的对照试验。放在这儿是因为它成本极低、没有已知坏处——不是因为有人证明过它有效。</p>'},
+      "54321":{h:"5-4-3-2-1 ✋",b:'<p>说出(心里说也行):</p><p><b>5</b> 样看得见的东西 · <b>4</b> 样摸得到的 · <b>3</b> 样听得见的 · <b>2</b> 样闻得到的 · <b>1</b> 样尝得到的。</p><p>数错、跳过、卡住都不要紧。目的不是完成,是把注意力从脑子里拽回房间里。</p><p class="tiny" style="margin-top:10px"><span class="ev weak">证据:弱</span> 流传极广,但专门研究只有一个:2025 年一项护理学生的单组、无对照、无随机化的前后测。也就是说——很多人觉得有用,但没人严格证明过。对你有用就是有用。</p>'}
+    };
+    $("#cmTTitle").textContent=TXT[a].h;$("#cmTBody").innerHTML=TXT[a].b;
+    subCalm("cmText");return;
+  }
+});
+$("#cmStart").addEventListener("click",function(){
+  if(breathTimer){stopBreath();$("#cmTx").textContent="停下了";$("#cmSub").textContent="停下不需要理由";return;}
+  runBreath($("#cmStart").getAttribute("data-proto")||"sigh");
+});
+
+/* ================= 证据柜 ================= */
+function subEvi(id){$$("#eviRoom .sub").forEach(function(s){s.classList.remove("on");});document.getElementById(id).classList.add("on");window.scrollTo({top:0});}
+$("#eviRoom").addEventListener("click",function(e){
+  var b=e.target.closest("[data-ev]");if(!b)return;
+  var a=b.getAttribute("data-ev");
+  if(a==="new"){$("#evText").value="";$("#evTag").value="";subEvi("evNew");}
+  if(a==="back")subEvi("ev0");
+  if(a==="save"){
+    var tx=$("#evText").value.trim();
+    if(!tx){toast("写一句就行");return;}
+    db.evidence.unshift({id:uid(),ts:Date.now(),text:tx,tag:$("#evTag").value});
+    save();subEvi("ev0");renderEvLog();toast("存进柜子了。");
+  }
+  if(a==="rand"){
+    if(!db.evidence.length){toast("柜子还空着");return;}
+    var r=db.evidence[Math.floor(Math.random()*db.evidence.length)];
+    $("#evPick").innerHTML='<div class="card lav"><div class="tiny">🎲 '+shortDate(r.ts)+(r.tag?' · 反驳「'+esc(r.tag)+'」':"")+'</div><p style="margin:6px 0 0;font-size:15.5px">'+esc(r.text)+'</p></div>';
+  }
+});
+function renderEvLog(){
+  var el=$("#evLog");
+  if(!db.evidence.length){el.innerHTML='<div class="empty">柜子空着。<br>下次做到什么了,回来存一条 —— 写简写就行。</div>';return;}
+  el.innerHTML=db.evidence.map(function(r){
+    return '<div class="log"><div class="lt"><span>'+shortDate(r.ts)+(r.tag?' · 反驳「'+esc(r.tag)+'」':"")+(r.seed?" · 简写":"")+'</span><button class="del" data-del="ev:'+r.id+'">✕</button></div><div>'+esc(r.text)+'</div></div>';
+  }).join("");
+}
+
+/* ================= 删除 ================= */
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-del]");if(!b)return;
+  var parts=b.getAttribute("data-del").split(":"),k=parts[0],id=parts[1];
+  var map={ci:"checkins",ag:"anger",tr:"trails",ev:"evidence"};
+  db[map[k]]=db[map[k]].filter(function(x){return x.id!==id;});
+  save();
+  if(k==="ci")renderCiLog();if(k==="ag")renderAgLog();if(k==="tr")renderTrLog();if(k==="ev")renderEvLog();
+  toast("删掉了");
+});
+
+/* ================= 周报 ================= */
+function buildReport(days){
+  var since=Date.now()-days*86400000;
+  var C=db.checkins.filter(function(r){return r.ts>=since;});
+  var T=db.trails.filter(function(r){return r.ts>=since;});
+  var A=db.anger.filter(function(r){return r.ts>=since;});
+  var E=db.evidence.filter(function(r){return r.ts>=since&&!r.seed;});
+  var a=new Date(since),b=new Date();
+  var L=[];
+  L.push("# 带去 session 的一页 · "+(a.getMonth()+1)+"/"+a.getDate()+"–"+(b.getMonth()+1)+"/"+b.getDate());
+  L.push("");
+  L.push("> 下面的数字只是「发生过什么」,不是完成度。没有目标值。");
+  L.push("");
+  if(!C.length&&!T.length&&!A.length&&!E.length){
+    L.push("这段时间没有记录。");
+    L.push("");
+    L.push("空着也是一种信息 —— 可以带去问一句:那几天我在忙什么、在躲什么,还是就是没事?");
+    return L.join("\n");
+  }
+  L.push("## 这段时间");
+  L.push("- check-in "+C.length+" 次 · 炸点便签 "+T.length+" 个 · 愤怒记录 "+A.length+" 条 · 证据柜新增 "+E.length+" 条");
+  L.push("");
+  var wc={},bc={},dc={},pc={};
+  C.forEach(function(r){
+    (r.words||[]).forEach(function(w){wc[w]=(wc[w]||0)+1;});
+    (r.body||[]).forEach(function(x){bc[x]=(bc[x]||0)+1;});
+    if(r.driver)dc[r.driver]=(dc[r.driver]||0)+1;
+  });
+  T.forEach(function(r){if(r.part)pc[r.part]=(pc[r.part]||0)+1;if(r.body)bc[r.body]=(bc[r.body]||0)+1;});
+  function top(o,n){return Object.keys(o).sort(function(x,y){return o[y]-o[x];}).slice(0,n).map(function(k){return k+" ×"+o[k];});}
+  if(Object.keys(wc).length){L.push("## 最常出现的词");L.push(top(wc,8).join(" · "));L.push("");}
+  if(Object.keys(bc).length){L.push("## 身体热点");L.push(top(bc,6).join(" · "));L.push("");}
+  if(Object.keys(dc).length){
+    var DN={self:"Self 在开车",stable:"像个很稳的 part(绷着)",blend:"某个 part 上头",unk:"说不清"};
+    L.push("## 谁在开车");
+    L.push(Object.keys(dc).map(function(k){return DN[k]+" ×"+dc[k];}).join(" · "));L.push("");
+  }
+  if(T.length){
+    L.push("## 炸点(反应 > 事件)");
+    T.forEach(function(r){
+      L.push("- ["+shortDate(r.ts)+"] "+(r.event||"(没写事件)")+
+        (r.body?" — 身体:"+r.body:"")+(r.size?" — 大小:"+r.size:"")+(r.part?" — 像:"+r.part:""));
+    });
+    L.push("");
+  }
+  if(A.length){
+    L.push("## 愤怒");
+    A.forEach(function(r){
+      if(r.type==="ask"){
+        L.push("- ["+shortDate(r.ts)+"] 保护者访谈");
+        if(r.a1)L.push("  - 冲着:"+r.a1);
+        if(r.a2)L.push("  - 它怕:"+r.a2);
+        if(r.a3)L.push("  - 它站在什么前面:"+r.a3);
+        if(r.a4)L.push("  - 它想让我知道:"+r.a4);
+      }else if(r.type==="letter"){
+        L.push("- ["+shortDate(r.ts)+"] 写了一封给"+(r.to||"某人")+"的不寄的信(内容留在 app 里,没往外带)");
+      }else if(r.type==="burned"){
+        L.push("- ["+shortDate(r.ts)+"] 写了一封给"+(r.to||"某人")+"的信,写完烧掉了");
+      }else{
+        var lv=LEVELS.filter(function(l){return l.v===r.level;})[0];
+        L.push("- ["+shortDate(r.ts)+"] 记了一笔"+(lv?" · "+lv.t:"")+(r.note?" · "+r.note:""));
+      }
+    });
+    L.push("");
+  }
+  if(E.length){
+    L.push("## 证据柜新增");
+    E.forEach(function(r){L.push("- "+r.text+(r.tag?"  (反驳「"+r.tag+"」)":""));});
+    L.push("");
+  }
+  var q=[];
+  var hotBody=top(bc,1)[0];
+  if(hotBody&&bc[hotBody.split(" ×")[0]]>=2)q.push("这段时间「"+hotBody.split(" ×")[0]+"」一直在响 —— 那里住着谁?");
+  var hotPart=Object.keys(pc)[0];
+  if(hotPart)q.push("「"+hotPart+"」出现了不止一次,想认识它一下。");
+  if(dc.stable&&dc.stable>=2)q.push("有好几次我记的是「稳,但绷着」—— 想聊聊那个很会顶班的部分。");
+  if(A.filter(function(r){return r.type==="ask";}).length)q.push("我做了一次愤怒的保护者访谈,想在这儿接着往下走。");
+  if(C.filter(function(r){return r.level>=4;}).length>=2)q.push("有两次以上是很大/淹没级别的,想看看那几次有什么共同点。");
+  if(q.length){L.push("## 可以带去问的(挑一个就够)");q.slice(0,4).forEach(function(x){L.push("- "+x);});L.push("");}
+  L.push("---");
+  L.push("*由「Luba的窝」生成 · 数据只存在本机*");
+  return L.join("\n");
+}
+$("#week").addEventListener("click",function(e){
+  var b=e.target.closest("[data-wk]");if(!b)return;
+  var a=b.getAttribute("data-wk");
+  if(a==="gen"||a==="gen14"){
+    var txt=buildReport(a==="gen"?7:14);
+    $("#wkOut").innerHTML='<div class="pre" id="wkPre">'+esc(txt)+'</div><div class="row" style="margin-top:10px"><button class="btn teal" style="flex:1" data-wk="copy">📋 复制全文</button><button class="btn quiet" data-wk="dl">⬇︎ 存成文件</button></div>';
+    $("#wkOut").setAttribute("data-txt",txt);
+  }
+  if(a==="copy"){
+    var t=$("#wkOut").getAttribute("data-txt")||"";
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){toast("复制好了 · 粘到备忘录或打印出来");},function(){fallbackCopy(t);});
+    }else fallbackCopy(t);
+  }
+  if(a==="dl"){
+    var t2=$("#wkOut").getAttribute("data-txt")||"";
+    dl(new Blob([t2],{type:"text/markdown"}),"session-"+new Date().toISOString().slice(0,10)+".md");
+  }
+  if(a==="export"){
+    dl(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),"luba-nook-backup-"+new Date().toISOString().slice(0,10)+".json");
+    toast("导出了 · 存到备忘录或云盘都行");
+  }
+  if(a==="import")$("#wkFile").click();
+  if(a==="wipe"){
+    if(!confirm("确定删掉全部记录吗?这个动作没法撤销。\n\n建议先导出一份备份。"))return;
+    if(!confirm("再确认一次:真的全部删除?"))return;
+    db={checkins:[],anger:[],trails:[],evidence:[],cfg:db.cfg||{},seeded:true};
+    save();toast("都删干净了。");go("home");
+  }
+  if(a==="saveCfg"){
+    db.cfg={ther:$("#cfgTher").value.trim(),eap:$("#cfgEap").value.trim(),friend:$("#cfgFriend").value.trim()};
+    save();renderCrisisMine();toast("存好了 · 危机卡里能直接点了");
+  }
+});
+function fallbackCopy(t){
+  var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");toast("复制好了");}catch(e){toast("复制失败 · 用「存成文件」吧");}
+  ta.remove();
+}
+function dl(blob,name){
+  var u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(u);},1500);
+}
+$("#wkFile").addEventListener("change",function(){
+  var f=this.files&&this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var p=JSON.parse(r.result);
+      if(!p||typeof p!=="object")throw 0;
+      ["checkins","anger","trails","evidence"].forEach(function(k){
+        if(Array.isArray(p[k])){
+          var have={};db[k].forEach(function(x){have[x.id]=1;});
+          p[k].forEach(function(x){if(x&&x.id&&!have[x.id])db[k].push(x);});
+          db[k].sort(function(a,b){return b.ts-a.ts;});
+        }
+      });
+      if(p.cfg)db.cfg=Object.assign(db.cfg||{},p.cfg);
+      save();loadCfg();renderCrisisMine();toast("导入完成 · 合并了,没有覆盖");
+    }catch(e){toast("这个文件读不了 · 要是备份文件才行");}
+  };
+  r.readAsText(f);this.value="";
+});
+function loadCfg(){
+  var c=db.cfg||{};
+  $("#cfgTher").value=c.ther||"";$("#cfgEap").value=c.eap||"";$("#cfgFriend").value=c.friend||"";
+}
+
+/* ================= 危机卡 ================= */
+function renderCrisisMine(){
+  var c=db.cfg||{},h="";
+  function tel(s){var m=String(s).match(/[\d\-\+\(\)\s]{7,}/);return m?m[0].replace(/[^\d\+]/g,""):null;}
+  if(c.ther){var t=tel(c.ther);h+=t?'<a class="crisis-item" href="tel:'+t+'"><b>🧭 我的 therapist</b><span>'+esc(c.ther)+'</span></a>':'<div class="crisis-item"><b>🧭 我的 therapist</b><span>'+esc(c.ther)+'</span></div>';}
+  if(c.eap){var e2=tel(c.eap);h+=e2?'<a class="crisis-item" href="tel:'+e2+'"><b>🏢 EAP</b><span>'+esc(c.eap)+'</span></a>':'<div class="crisis-item"><b>🏢 EAP</b><span>'+esc(c.eap)+'</span></div>';}
+  if(c.friend){var f2=tel(c.friend);h+=f2?'<a class="crisis-item" href="tel:'+f2+'"><b>🫂 想找的人</b><span>'+esc(c.friend)+'</span></a>':'<div class="crisis-item"><b>🫂 想找的人</b><span>'+esc(c.friend)+'</span></div>';}
+  if(!h)h='<div class="crisis-item"><b>➕ 还没填自己的联系人</b><span>去「周一那一页」最底下可以填,填了这里能一键拨号</span></div>';
+  $("#crisisMine").innerHTML=h;
+}
+$("#crisisBtn").addEventListener("click",function(){renderCrisisMine();$("#crisisSheet").classList.add("on");});
+$("#crisisClose").addEventListener("click",function(){$("#crisisSheet").classList.remove("on");});
+$("#crisisSheet").addEventListener("click",function(e){if(e.target===this)this.classList.remove("on");});
+
+/* ================= 启动 ================= */
+loadCfg();renderCrisisMine();renderCiLog();renderAgLog();renderTrLog();renderEvLog();
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
+}
+})();
+</script>
+</body>
+</html>
