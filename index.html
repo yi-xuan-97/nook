@@ -265,6 +265,57 @@ details summary::before{content:"▸";color:var(--accent);transition:transform .
 details[open] summary::before{transform:rotate(90deg)}
 details .db{margin-top:9px;font-size:14.5px;color:var(--soft)}
 .danger{color:var(--rose);font-weight:600}
+
+/* 撑不住 */
+.softwrap{text-align:center;padding:6px 0 4px}
+.softline{font-size:17px;line-height:1.75;margin-bottom:18px}
+.softbtn{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;margin-bottom:10px;box-shadow:var(--shadow);
+}
+.softbtn .em{font-size:24px;width:30px;text-align:center;flex:0 0 auto}
+.softbtn b{display:block;font-size:16.5px}
+.softbtn span{font-size:13.5px;color:var(--soft);display:block;line-height:1.5}
+.sitbox{text-align:center;padding:14px 0}
+.sitdot{
+  width:88px;height:88px;border-radius:50%;margin:0 auto 14px;
+  background:radial-gradient(circle at 38% 34%,#EFC79B,#D89A5E);
+  transition:transform 4s ease-in-out;
+}
+.sitdot.big{transform:scale(1.35)}
+.humanbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--rose-soft);border:1px solid #F0DBD3;border-radius:14px;
+  padding:12px 15px;margin-top:16px;font-size:14.5px;
+}
+/* 发完火之后 */
+.twocol{display:grid;grid-template-columns:1fr;gap:11px;margin:12px 0}
+.tcol{border-radius:14px;padding:14px 16px;border:1px solid var(--line)}
+.tcol.fact{background:var(--teal-soft);border-color:#D3E6E2}
+.tcol.verdict{background:var(--rose-soft);border-color:#F0DBD3}
+.tcol h4{font-size:14px;margin-bottom:6px}
+.tcol .tinyc{font-size:12.5px;color:var(--soft);margin-bottom:8px;line-height:1.55}
+/* 花名册 */
+.pchips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+.pchip{
+  font-size:14.5px;padding:7px 13px;border-radius:99px;
+  background:var(--card);border:1.5px solid var(--line);color:var(--ink);
+}
+.pchip.on{background:var(--lav);border-color:var(--lav);color:#fff;font-weight:600}
+.ptype{font-size:11.5px;opacity:.75;margin-left:4px}
+/* 星标 */
+.star{background:none;border:none;font-size:16px;padding:0 5px;filter:grayscale(1) opacity(.35)}
+.star.on{filter:none}
+.log .lt{align-items:center}
+.log.starred{border-color:#E4B06A;background:#FFFCF6}
+/* 搜索 */
+.searchrow{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.searchrow input{flex:1;min-width:150px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.filt{font-size:13.5px;padding:6px 13px;border-radius:99px;background:var(--card);border:1.5px solid var(--line)}
+.filt.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+.hitword{background:#FBE3BE;border-radius:3px;padding:0 2px}
 footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);line-height:1.7}
 </style>
 </head>
@@ -310,6 +361,12 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
     <div class="bb" id="lubaLine">今天不用做什么。进来待着也算。</div>
   </div>
 
+  <button class="entry" data-soft="open" style="background:#FDF1E9;border-color:#F0D6C2">
+    <span class="em">🫂</span>
+    <span class="tx"><b>撑不住</b><span>一按就开,什么都不问。不用记录,不用写。</span></span>
+    <span class="go">›</span>
+  </button>
+
   <button class="entry hero" data-go="checkin">
     <span class="em">🫧</span>
     <span class="tx"><b>一分钟 check-in</b><span>身体先说话,分析靠后。做完就结束,不给下一步。</span></span>
@@ -340,6 +397,18 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
     <span class="go">›</span>
   </button>
 
+  <button class="entry" data-go="parts">
+    <span class="em">🚌</span>
+    <span class="tx"><b>Parts 花名册</b><span>登记你认识的部分。之后「像谁」直接点,不用每次打字。</span></span>
+    <span class="go">›</span>
+  </button>
+
+  <button class="entry" data-go="history">
+    <span class="em">🔎</span>
+    <span class="tx"><b>翻历史</b><span>搜一个词,看看它上次什么时候来过。</span></span>
+    <span class="go">›</span>
+  </button>
+
   <button class="entry" data-go="week">
     <span class="em">📄</span>
     <span class="tx"><b>周一那一页</b><span>把这一周变成能带去session的材料。</span></span>
@@ -350,7 +419,7 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
     <p class="tiny" style="margin:0">
       🐾 这里<b>没有连续天数、没有分数、没有完成率</b>——研究显示这类东西对"失败=被替换"的系统只会加害。<br>
       🔒 所有内容只存在这台设备的浏览器里,不上传任何地方。<br>
-      🍽 不追踪吃喝,一个字都不问。
+      🍽 不追踪吃喝,一个字都不问。<br>🫂 撑不住的时候按右下角 —— 那一屏什么都不问。
     </p>
   </div>
 </section>
@@ -465,6 +534,11 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
       <span class="tx"><b>就记一笔</b><span>不想展开。记下强度和一句话就走。</span></span>
       <span class="go">›</span>
     </button>
+    <button class="entry" data-ag="after" style="background:#FDF1E9;border-color:#F0D6C2">
+      <span class="em">⚖️</span>
+      <span class="tx"><b>发完火之后</b><span>已经发生了,现在你在审判自己。这条路专门接这一段。</span></span>
+      <span class="go">›</span>
+    </button>
 
     <hr class="d">
     <div class="row between"><h3 style="margin:0">愤怒记录</h3><span class="tiny" id="agCount"></span></div>
@@ -505,6 +579,42 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
     <p class="tiny" style="margin-top:12px">💡 如果第2、3题冒出来的东西很大、很小、很早——停在这儿,别往下挖。标记它,周一带给therapist。这不是胆小,这是IFS的标准流程。</p>
   </div>
 
+  <!-- 发完火之后 -->
+  <div class="sub" id="agAfter">
+    <h2>发完火之后 ⚖️</h2>
+    <div class="card rose flat">
+      <p style="margin:0;font-size:15px">火已经发完了。接下来最容易发生的事是:<b>有个部分立刻开庭,被告是你。</b><br>
+      这一屏不判对错、不叫你道歉、也不叫你原谅谁。只做一件事:<b>把「实际发生的」和「它在加的判决」分开摆。</b></p>
+    </div>
+
+    <label class="fl">① 刚才实际发生了什么(只写事实,不加形容)</label>
+    <textarea id="af1" placeholder="比如:我提高了音量。对方吼回来。电话挂了。"></textarea>
+
+    <label class="fl">② 现在正在审判你的,是谁?</label>
+    <div class="pchips" id="afWho"></div>
+    <input type="text" id="af2" placeholder="或者自己写一个名字">
+
+    <label class="fl">③ 它正在说什么?(原话,难听也照抄)</label>
+    <textarea id="af3" placeholder="「你怎么这么傻」「是不是我的问题」……照抄就行,不用修饰。"></textarea>
+
+    <div class="twocol">
+      <div class="tcol fact"><h4>🧊 确实发生的</h4><div class="tinyc">能拍下来的、能被第三个人证实的部分。</div><div id="afFact" class="tiny">(写完上面第①格,这里会显示)</div></div>
+      <div class="tcol verdict"><h4>⚖️ 它加上去的判决</h4><div class="tinyc">这一栏不是事实,是一个 part 的发言。它可以被听见,但它不是法官。</div><div id="afVerdict" class="tiny">(写完上面第③格,这里会显示)</div></div>
+    </div>
+
+    <label class="fl">④ 它在保护什么?(可选,答不出来就空着)</label>
+    <input type="text" id="af4" placeholder="它这么骂你,是想避免什么发生?">
+
+    <div class="card sand flat">
+      <p class="tiny" style="margin:0">🐾 <b>Luba的旁白:</b>解释一个人为什么会开枪,不等于说中枪的人活该 —— 这话对别人成立,对你自己也成立。哪一边是真的,今晚不用决定。</p>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn quiet" data-ag="back">←</button>
+      <button class="btn teal" style="flex:1" data-ag="saveAfter">两边都记下</button>
+    </div>
+  </div>
+
   <!-- 快记 -->
   <div class="sub" id="agQuick">
     <h2>就记一笔</h2>
@@ -543,6 +653,7 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
     <label class="fl">③ 反应有多大(1–10)</label>
     <input type="text" id="tr3" inputmode="numeric" placeholder="凭感觉,不用准">
     <label class="fl">④ 这个反应像谁(可选)</label>
+    <div class="pchips" id="trWho"></div>
     <input type="text" id="tr4" placeholder="认识这个part吗?不认识就空着">
     <div class="row" style="margin-top:14px">
       <button class="btn quiet" data-tr="back">←</button>
@@ -662,6 +773,18 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
   <div id="wkOut"></div>
 
   <hr class="d">
+  <h3>Session 之后 · 三行 🪑</h3>
+  <p class="muted" style="font-size:14px">刚做完 session,趁还热的时候记三行。下次周报会把它放在最上面 —— 闭环就闭上了。</p>
+  <label class="fl">什么落地了(哪句话你还在想)</label>
+  <input type="text" id="saLand" placeholder="一句话">
+  <label class="fl">想继续什么</label>
+  <input type="text" id="saNext" placeholder="下次想从哪儿接着走">
+  <label class="fl">作业 / therapist 说的(可选)</label>
+  <input type="text" id="saHw" placeholder="不写也行">
+  <div class="row" style="margin-top:12px"><button class="btn teal sm" data-wk="saveSA">记下这三行</button></div>
+  <div id="saLog"></div>
+
+  <hr class="d">
   <h3>数据(全在你手里)</h3>
   <details>
     <summary>🔐 这些东西存在哪儿</summary>
@@ -697,18 +820,105 @@ footer{margin-top:34px;padding:16px 0 8px;border-top:1px solid var(--line);font-
   </footer>
 </section>
 
+
+<!-- ================= Parts 花名册 ================= -->
+<section class="screen" id="parts">
+  <h2>Parts 花名册 🚌</h2>
+  <div class="card lav flat">
+    <p style="margin:0;font-size:15px">登记之后,「炸点便签 · 像谁」和「发完火之后 · 谁在审判我」就能直接点,不用每次打字。周报也会告诉你<b>这周谁出勤最多</b>。</p>
+    <p class="tiny" style="margin:8px 0 0">⚠️ Exile 只登记名字就好 —— 认识它的工作留给 session,不在这儿做。</p>
+  </div>
+  <div class="pmap-form">
+    <input type="text" id="ptName" placeholder="名字(清单君 / 一团紧绷 / 批评家)" maxlength="20">
+    <select id="ptType">
+      <option value="M">🗂 Manager</option>
+      <option value="F">🧯 Firefighter</option>
+      <option value="E">🛋 Exile(只记名字)</option>
+      <option value="U">❓ 还不确定</option>
+    </select>
+    <input type="text" id="ptNote" placeholder="一句话:它常说什么 / 在身体哪里" maxlength="60">
+    <button class="btn small" id="ptAdd">+ 登记</button>
+  </div>
+  <div id="ptList"></div>
+</section>
+
+<!-- ================= 翻历史 ================= -->
+<section class="screen" id="history">
+  <h2>翻历史 🔎</h2>
+  <p class="muted">搜一个词,看看它上次什么时候来过。全部记录都在这儿,没有条数上限。</p>
+  <div class="searchrow">
+    <input type="text" id="hqInput" placeholder="搜:委屈 / 胸口 / 批评家 / 任意一句话">
+    <button class="btn sm quiet" id="hqClear">清空</button>
+  </div>
+  <div class="filters" id="hqFilters"></div>
+  <div id="hqStats"></div>
+  <div id="hqOut"></div>
+</section>
+
 </div><!-- /#app -->
 
 <!-- ================= 底部导航 ================= -->
 <nav class="nav" id="nav">
   <button data-go="home" data-nav="home"><span class="i">🏠</span>窝</button>
   <button data-go="checkin" data-nav="checkin"><span class="i">🫧</span>check-in</button>
+  <button data-go="trail" data-nav="trail"><span class="i">🏷</span>炸点</button>
   <button data-go="anger" data-nav="anger"><span class="i">🌋</span>愤怒</button>
-  <button data-go="calm" data-nav="calm"><span class="i">🌬</span>稳一稳</button>
+  <button data-go="eviRoom" data-nav="eviRoom"><span class="i">🗄</span>证据柜</button>
   <button data-go="week" data-nav="week"><span class="i">📄</span>周一</button>
 </nav>
 
-<button class="crisisbtn" id="crisisBtn" aria-label="紧急联系">🆘</button>
+<button class="crisisbtn" id="softBtn" data-soft="open" aria-label="撑不住">🫂</button>
+
+<div class="sheet" id="softSheet">
+  <div class="inner">
+    <div class="row between" style="margin-bottom:10px">
+      <h2 style="margin:0">撑不住</h2>
+      <button class="btn quiet sm" id="softClose">关掉</button>
+    </div>
+    <div id="softHome">
+      <div class="softwrap">
+        <svg class="cat" style="width:56px;height:56px"><use href="#cat"/></svg>
+        <p class="softline">你现在不需要做任何事。<br>这一屏不会问你任何问题。</p>
+      </div>
+      <button class="softbtn" data-soft="breathe"><span class="em">🌬</span><span><b>跟着呼吸</b><span>不用数,跟着圆点大小走就行</span></span></button>
+      <button class="softbtn" data-soft="write"><span class="em">✍️</span><span><b>写一行,谁也不看</b><span>存不存都行,不存就当没发生</span></span></button>
+      <button class="softbtn" data-soft="sit"><span class="em">🕯</span><span><b>就待着</b><span>60秒,什么都不做。我陪着</span></span></button>
+      <button class="softbtn" data-soft="close"><span class="em">🌙</span><span><b>关掉手机</b><span>这也是一个完整的选择</span></span></button>
+      <div class="humanbar">
+        <span>想找真人的话 —</span>
+        <button class="btn sm ghost" data-soft="human">危机资源 →</button>
+      </div>
+    </div>
+
+    <div id="softBreathe" style="display:none">
+      <div class="breathstage" style="height:210px">
+        <div class="orb" id="sfOrb"></div>
+        <div class="breathtx" id="sfTx">跟着圆点</div>
+        <div class="breathsub" id="sfSub">变大吸气 · 变小呼气 · 不用数</div>
+      </div>
+      <button class="btn quiet wide" data-soft="back">← 够了</button>
+    </div>
+
+    <div id="softWrite" style="display:none">
+      <p class="muted">写什么都行。不写完整句子也行。</p>
+      <textarea id="sfText" class="tall" placeholder="……"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn quiet" data-soft="back">←</button>
+        <button class="btn" style="flex:1" data-soft="saveWrite">存起来</button>
+        <button class="btn ghost" data-soft="tossWrite">🔥 不存</button>
+      </div>
+    </div>
+
+    <div id="softSit" style="display:none">
+      <div class="sitbox">
+        <div class="sitdot" id="sfDot"></div>
+        <p class="softline" id="sfSitTx">就待着。</p>
+        <p class="muted" id="sfSitSub"></p>
+      </div>
+      <button class="btn quiet wide" data-soft="back">← 够了</button>
+    </div>
+  </div>
+</div>
 
 <div class="sheet" id="crisisSheet">
   <div class="inner">
@@ -733,7 +943,7 @@ var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s
 
 /* ================= 数据 ================= */
 var KEY="luba_nook_v1";
-var db={checkins:[],anger:[],trails:[],evidence:[],cfg:{},seeded:false};
+var db={checkins:[],anger:[],trails:[],evidence:[],roster:[],sessions:[],soft:[],cfg:{},seeded:false};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object")db=Object.assign(db,p);}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){toast("存不下了 · 可能空间满了,导出备份后清理一下");}}
 function uid(){return Date.now()+"_"+Math.random().toString(36).slice(2,7);}
@@ -774,7 +984,7 @@ function fmt(ts){
 function shortDate(ts){var d=new Date(ts);return (d.getMonth()+1)+"/"+d.getDate();}
 
 /* ================= 路由 ================= */
-var TITLES={home:"Luba的窝",checkin:"check-in",anger:"愤怒专区",trail:"Trailhead",calm:"稳一稳",eviRoom:"证据柜",week:"周一那一页"};
+var TITLES={home:"Luba的窝",checkin:"check-in",anger:"愤怒专区",trail:"Trailhead",calm:"稳一稳",eviRoom:"证据柜",week:"周一那一页",parts:"Parts 花名册",history:"翻历史"};
 function go(id){
   $$(".screen").forEach(function(s){s.classList.remove("on");});
   var el=document.getElementById(id);if(el)el.classList.add("on");
@@ -783,10 +993,12 @@ function go(id){
   window.scrollTo({top:0});
   if(id==="checkin"){ciReset();renderCiLog();}
   if(id==="anger"){subAnger("ag0");renderAgLog();}
-  if(id==="trail"){subTrail("tr0");renderTrLog();}
+  if(id==="trail"){subTrail("tr0");renderTrLog();renderPartChips();}
   if(id==="calm"){stopBreath();subCalm("cm0");}
   if(id==="eviRoom"){subEvi("ev0");renderEvLog();$("#evPick").innerHTML="";}
-  if(id==="week"){loadCfg();}
+  if(id==="week"){loadCfg();renderSA();}
+  if(id==="parts"){renderRoster();}
+  if(id==="history"){renderHistory();}
 }
 document.addEventListener("click",function(ev){
   var t=ev.target.closest("[data-go]");
@@ -926,7 +1138,7 @@ function renderCiLog(){
   el.innerHTML=db.checkins.slice(0,25).map(function(r){
     var lv=LEVELS.filter(function(l){return l.v===r.level;})[0];
     var dr=DRIVERS.filter(function(d){return d.v===r.driver;})[0];
-    return '<div class="log"><div class="lt"><span>'+fmt(r.ts)+(lv?" · "+esc(lv.t):"")+'</span><button class="del" data-del="ci:'+r.id+'">✕</button></div>'+
+    return '<div class="log'+(r.star?" starred":"")+'"><div class="lt"><span>'+fmt(r.ts)+(lv?" · "+esc(lv.t):"")+'</span><span><button class="star'+(r.star?" on":"")+'" data-star="ci:'+r.id+'" title="带去 session">⭐</button><button class="del" data-del="ci:'+r.id+'">✕</button></span></div>'+
       (r.body.length?'<div>📍 '+esc(r.body.join(" · "))+'</div>':"")+
       (r.words.length?'<div class="chips">'+r.words.map(function(w){return '<span class="chip">'+esc(w)+'</span>';}).join("")+'</div>':"")+
       (r.note?'<div style="margin-top:5px">'+esc(r.note)+'</div>':"")+
@@ -949,6 +1161,16 @@ $("#anger").addEventListener("click",function(e){
   var a=b.getAttribute("data-ag");
   if(a==="letter"){$("#agTo").value="";$("#agBody").value="";subAnger("agLetter");}
   if(a==="ask"){["ask1","ask2","ask3","ask4"].forEach(function(i){$("#"+i).value="";});subAnger("agAsk");}
+  if(a==="after"){["af1","af2","af3","af4"].forEach(function(i){$("#"+i).value="";});
+    $$("#afWho .pchip").forEach(function(x){x.classList.remove("on");});
+    renderPartChips();afterSync();subAnger("agAfter");}
+  if(a==="saveAfter"){
+    var r={id:uid(),ts:Date.now(),type:"after",fact:$("#af1").value.trim(),who:$("#af2").value.trim(),
+           verdict:$("#af3").value.trim(),protect:$("#af4").value.trim()};
+    if(!r.fact&&!r.verdict){toast("至少写一格?");return;}
+    db.anger.unshift(r);save();subAnger("ag0");renderAgLog();
+    toast("两边都记下了。哪一边是真的,今晚不用决定。");
+  }
   if(a==="quick"){agLevel=null;$$("#agLevels .lv").forEach(function(x){x.classList.remove("on");});$("#agQNote").value="";subAnger("agQuick");}
   if(a==="back")subAnger("ag0");
   if(a==="saveLetter"){
@@ -980,9 +1202,14 @@ function renderAgLog(){
   $("#agCount").textContent=db.anger.length?db.anger.length+" 条":"";
   if(!db.anger.length){el.innerHTML='<div class="empty">还没有记录。<br>愤怒来的时候,这儿一直开着。</div>';return;}
   el.innerHTML=db.anger.slice(0,25).map(function(r){
-    var head='<div class="lt"><span>'+fmt(r.ts)+'</span><button class="del" data-del="ag:'+r.id+'">✕</button></div>';
+    var head='<div class="lt"><span>'+fmt(r.ts)+'</span><span><button class="star'+(r.star?" on":"")+'" data-star="ag:'+r.id+'" title="带去 session">⭐</button><button class="del" data-del="ag:'+r.id+'">✕</button></span></div>';
     if(r.type==="letter")return '<div class="log">'+head+'<div>✉️ 给'+esc(r.to||"某人")+'的信</div><div class="tiny" style="margin-top:4px;white-space:pre-wrap">'+esc(r.body.slice(0,90))+(r.body.length>90?"…":"")+'</div></div>';
     if(r.type==="burned")return '<div class="log">'+head+'<div>🔥 写了一封给'+esc(r.to||"某人")+'的信,烧掉了</div><div class="tiny">内容未保存 —— 这是你选的</div></div>';
+    if(r.type==="after")return '<div class="log'+(r.star?" starred":"")+'">'+head+'<div>⚖️ 发完火之后</div>'+
+      (r.fact?'<div class="tiny">🧊 事实:'+esc(r.fact)+'</div>':"")+
+      (r.who?'<div class="tiny">审判者:'+esc(r.who)+'</div>':"")+
+      (r.verdict?'<div class="tiny">⚖️ 判决:'+esc(r.verdict)+'</div>':"")+
+      (r.protect?'<div class="tiny">它在保护:'+esc(r.protect)+'</div>':"")+'</div>';
     if(r.type==="ask")return '<div class="log">'+head+'<div>🔦 保护者访谈</div>'+
       (r.a1?'<div class="tiny">冲着:'+esc(r.a1)+'</div>':"")+
       (r.a2?'<div class="tiny">怕:'+esc(r.a2)+'</div>':"")+
@@ -1010,7 +1237,7 @@ function renderTrLog(){
   var el=$("#trLog");
   if(!db.trails.length){el.innerHTML='<div class="empty">还没有便签。<br>下次被炸到的时候再来。</div>';return;}
   el.innerHTML=db.trails.slice(0,25).map(function(r){
-    return '<div class="log"><div class="lt"><span>'+fmt(r.ts)+(r.size?" · 大小 "+esc(r.size):"")+'</span><button class="del" data-del="tr:'+r.id+'">✕</button></div>'+
+    return '<div class="log'+(r.star?" starred":"")+'"><div class="lt"><span>'+fmt(r.ts)+(r.size?" · 大小 "+esc(r.size):"")+'</span><span><button class="star'+(r.star?" on":"")+'" data-star="tr:'+r.id+'" title="带去 session">⭐</button><button class="del" data-del="tr:'+r.id+'">✕</button></span></div>'+
       (r.event?'<div>'+esc(r.event)+'</div>':"")+
       '<div class="chips">'+(r.body?'<span class="chip">📍'+esc(r.body)+'</span>':"")+(r.part?'<span class="chip">像:'+esc(r.part)+'</span>':"")+'</div></div>';
   }).join("");
@@ -1129,8 +1356,27 @@ function buildReport(days){
     L.push("空着也是一种信息 —— 可以带去问一句:那几天我在忙什么、在躲什么,还是就是没事?");
     return L.join("\n");
   }
+  var starred=[];
+  [["checkins","🫧"],["trails","🏷"],["anger","🌋"],["evidence","🗄"],["soft","🫂"]].forEach(function(p){
+    (db[p[0]]||[]).forEach(function(r){
+      if(r.star&&r.ts>=since){
+        var t=r.note||r.event||r.text||r.verdict||r.a2||r.body||(r.words||[]).join("·")||"(没写文字)";
+        starred.push("- "+p[1]+" ["+shortDate(r.ts)+"] "+String(t).slice(0,90));
+      }
+    });
+  });
+  if(starred.length){L.push("## ⭐ 我标了要带去的");starred.forEach(function(x){L.push(x);});L.push("");}
+  var lastSA=(db.sessions||[])[0];
+  if(lastSA){
+    L.push("## 上次 session 之后我写的");
+    if(lastSA.land)L.push("- 落地了:"+lastSA.land);
+    if(lastSA.next)L.push("- 想继续:"+lastSA.next);
+    if(lastSA.hw)L.push("- 作业:"+lastSA.hw);
+    L.push("");
+  }
   L.push("## 这段时间");
-  L.push("- check-in "+C.length+" 次 · 炸点便签 "+T.length+" 个 · 愤怒记录 "+A.length+" 条 · 证据柜新增 "+E.length+" 条");
+  var SF=(db.soft||[]).filter(function(r){return r.ts>=since;});
+  L.push("- check-in "+C.length+" 次 · 炸点便签 "+T.length+" 个 · 愤怒记录 "+A.length+" 条 · 证据柜新增 "+E.length+" 条"+(SF.length?" · 撑不住时写下 "+SF.length+" 条":""));
   L.push("");
   var wc={},bc={},dc={},pc={};
   C.forEach(function(r){
@@ -1142,6 +1388,8 @@ function buildReport(days){
   function top(o,n){return Object.keys(o).sort(function(x,y){return o[y]-o[x];}).slice(0,n).map(function(k){return k+" ×"+o[k];});}
   if(Object.keys(wc).length){L.push("## 最常出现的词");L.push(top(wc,8).join(" · "));L.push("");}
   if(Object.keys(bc).length){L.push("## 身体热点");L.push(top(bc,6).join(" · "));L.push("");}
+  A.forEach(function(r){if(r.type==="after"&&r.who)pc[r.who]=(pc[r.who]||0)+1;});
+  if(Object.keys(pc).length){L.push("## 这周出勤的 parts");L.push(top(pc,6).join(" · "));L.push("");}
   if(Object.keys(dc).length){
     var DN={self:"Self 在开车",stable:"像个很稳的 part(绷着)",blend:"某个 part 上头",unk:"说不清"};
     L.push("## 谁在开车");
@@ -1168,6 +1416,12 @@ function buildReport(days){
         L.push("- ["+shortDate(r.ts)+"] 写了一封给"+(r.to||"某人")+"的不寄的信(内容留在 app 里,没往外带)");
       }else if(r.type==="burned"){
         L.push("- ["+shortDate(r.ts)+"] 写了一封给"+(r.to||"某人")+"的信,写完烧掉了");
+      }else if(r.type==="after"){
+        L.push("- ["+shortDate(r.ts)+"] 发完火之后");
+        if(r.fact)L.push("  - 事实:"+r.fact);
+        if(r.who)L.push("  - 审判我的是:"+r.who);
+        if(r.verdict)L.push("  - 它说:"+r.verdict);
+        if(r.protect)L.push("  - 它在保护:"+r.protect);
       }else{
         var lv=LEVELS.filter(function(l){return l.v===r.level;})[0];
         L.push("- ["+shortDate(r.ts)+"] 记了一笔"+(lv?" · "+lv.t:"")+(r.note?" · "+r.note:""));
@@ -1219,8 +1473,15 @@ $("#week").addEventListener("click",function(e){
   if(a==="wipe"){
     if(!confirm("确定删掉全部记录吗?这个动作没法撤销。\n\n建议先导出一份备份。"))return;
     if(!confirm("再确认一次:真的全部删除?"))return;
-    db={checkins:[],anger:[],trails:[],evidence:[],cfg:db.cfg||{},seeded:true};
+    db={checkins:[],anger:[],trails:[],evidence:[],roster:[],sessions:[],soft:[],cfg:db.cfg||{},seeded:true};
     save();toast("都删干净了。");go("home");
+  }
+  if(a==="saveSA"){
+    var r={id:uid(),ts:Date.now(),land:$("#saLand").value.trim(),next:$("#saNext").value.trim(),hw:$("#saHw").value.trim()};
+    if(!r.land&&!r.next&&!r.hw){toast("三格都空着");return;}
+    db.sessions.unshift(r);save();
+    $("#saLand").value="";$("#saNext").value="";$("#saHw").value="";
+    renderSA();toast("记下了。下次周报会放在最上面。");
   }
   if(a==="saveCfg"){
     db.cfg={ther:$("#cfgTher").value.trim(),eap:$("#cfgEap").value.trim(),friend:$("#cfgFriend").value.trim()};
@@ -1245,7 +1506,7 @@ $("#wkFile").addEventListener("change",function(){
     try{
       var p=JSON.parse(r.result);
       if(!p||typeof p!=="object")throw 0;
-      ["checkins","anger","trails","evidence"].forEach(function(k){
+      ["checkins","anger","trails","evidence","roster","sessions","soft"].forEach(function(k){
         if(Array.isArray(p[k])){
           var have={};db[k].forEach(function(x){have[x.id]=1;});
           p[k].forEach(function(x){if(x&&x.id&&!have[x.id])db[k].push(x);});
@@ -1273,12 +1534,208 @@ function renderCrisisMine(){
   if(!h)h='<div class="crisis-item"><b>➕ 还没填自己的联系人</b><span>去「周一那一页」最底下可以填,填了这里能一键拨号</span></div>';
   $("#crisisMine").innerHTML=h;
 }
-$("#crisisBtn").addEventListener("click",function(){renderCrisisMine();$("#crisisSheet").classList.add("on");});
+/* 危机卡现在由「撑不住 → 危机资源」打开,不再有独立按钮 */
 $("#crisisClose").addEventListener("click",function(){$("#crisisSheet").classList.remove("on");});
 $("#crisisSheet").addEventListener("click",function(e){if(e.target===this)this.classList.remove("on");});
 
+/* ================= 撑不住 ================= */
+var sfTimer=null, sfSitTimer=null;
+function softPane(id){
+  ["softHome","softBreathe","softWrite","softSit"].forEach(function(k){
+    var el=$("#"+k); if(el) el.style.display=(k===id?"block":"none");
+  });
+}
+function softStop(){
+  if(sfTimer){clearTimeout(sfTimer);sfTimer=null;}
+  if(sfSitTimer){clearInterval(sfSitTimer);sfSitTimer=null;}
+  var o=$("#sfOrb"); if(o){o.style.transitionDuration="1s";o.style.transform="scale(1)";}
+}
+function softBreathe(){
+  var steps=[{t:"吸气",d:2000,s:1.42},{t:"再吸一小口",d:1100,s:1.6},{t:"呼出去,慢慢的",d:6000,s:.85},{t:"停一下",d:1200,s:.85}];
+  var i=0;
+  (function step(){
+    var st=steps[i%steps.length];
+    $("#sfTx").textContent=st.t;
+    var o=$("#sfOrb"); o.style.transitionDuration=(st.d/1000)+"s"; o.style.transform="scale("+st.s+")";
+    i++; sfTimer=setTimeout(step,st.d);
+  })();
+}
+function softSit(){
+  var left=60, big=false;
+  $("#sfSitTx").textContent="就待着。";
+  $("#sfSitSub").textContent="还有 60 秒";
+  var dot=$("#sfDot");
+  sfSitTimer=setInterval(function(){
+    left--; big=!big;
+    dot.classList.toggle("big",big);
+    $("#sfSitSub").textContent = left>0 ? ("还有 "+left+" 秒") : "";
+    if(left<=0){
+      clearInterval(sfSitTimer); sfSitTimer=null;
+      $("#sfSitTx").textContent="到了。";
+      $("#sfSitSub").textContent="你刚才什么都没做,一整分钟。这也算数。";
+    }
+  },1000);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-soft]"); if(!b)return;
+  var a=b.getAttribute("data-soft");
+  if(a==="open"){softStop();softPane("softHome");$("#sfText").value="";$("#softSheet").classList.add("on");return;}
+  if(a==="back"){softStop();softPane("softHome");return;}
+  if(a==="breathe"){softPane("softBreathe");softBreathe();return;}
+  if(a==="sit"){softPane("softSit");softSit();return;}
+  if(a==="write"){softPane("softWrite");setTimeout(function(){$("#sfText").focus();},120);return;}
+  if(a==="close"){$("#softSheet").classList.remove("on");softStop();toast("🌙 关掉也是一个完整的选择");return;}
+  if(a==="human"){$("#softSheet").classList.remove("on");softStop();renderCrisisMine();$("#crisisSheet").classList.add("on");return;}
+  if(a==="saveWrite"){
+    var t=$("#sfText").value.trim();
+    if(!t){toast("还没写东西");return;}
+    db.soft.unshift({id:uid(),ts:Date.now(),text:t});save();
+    $("#softSheet").classList.remove("on");softStop();toast("存好了。在「翻历史」里能找到。");return;
+  }
+  if(a==="tossWrite"){$("#sfText").value="";$("#softSheet").classList.remove("on");softStop();toast("没存。就当没发生。");return;}
+});
+$("#softClose").addEventListener("click",function(){$("#softSheet").classList.remove("on");softStop();});
+$("#softSheet").addEventListener("click",function(e){if(e.target===this){this.classList.remove("on");softStop();}});
+
+/* ================= Parts 花名册 ================= */
+var PTYPE={M:"🗂 Manager",F:"🧯 Firefighter",E:"🛋 Exile",U:"❓ 不确定"};
+function renderRoster(){
+  var el=$("#ptList"); if(!el)return;
+  if(!db.roster.length){el.innerHTML='<div class="empty">花名册还空着。<br>登记一个,「像谁」那一格就能直接点了。</div>';return;}
+  el.innerHTML=["M","F","E","U"].map(function(tp){
+    var items=db.roster.filter(function(r){return r.t===tp;});
+    if(!items.length)return "";
+    return '<div class="pm-group"><h4>'+PTYPE[tp]+'('+items.length+')</h4>'+items.map(function(r){
+      return '<div class="pm-chip"><b>'+esc(r.n)+'</b><span class="muted" style="font-size:13.5px">'+esc(r.d||"")+'</span><button class="x" data-delpt="'+r.id+'">✕</button></div>';
+    }).join("")+'</div>';
+  }).join("");
+  el.querySelectorAll("[data-delpt]").forEach(function(b){
+    b.addEventListener("click",function(){
+      db.roster=db.roster.filter(function(x){return x.id!==b.getAttribute("data-delpt");});
+      save();renderRoster();renderPartChips();
+    });
+  });
+}
+if($("#ptAdd"))$("#ptAdd").addEventListener("click",function(){
+  var n=$("#ptName").value.trim();
+  if(!n){toast("先给它起个名字");return;}
+  db.roster.push({id:uid(),n:n,t:$("#ptType").value,d:$("#ptNote").value.trim()});
+  save();$("#ptName").value="";$("#ptNote").value="";
+  renderRoster();renderPartChips();toast("登记好了 🚌");
+});
+function renderPartChips(){
+  var html=db.roster.length
+    ? db.roster.map(function(r){return '<button class="pchip" data-pn="'+esc(r.n)+'">'+esc(r.n)+'<span class="ptype">'+PTYPE[r.t].split(" ")[0]+'</span></button>';}).join("")
+    : '<span class="tiny">花名册还空着 —— 直接在下面打字也行,或者去「Parts 花名册」登记几个。</span>';
+  ["#trWho","#afWho"].forEach(function(sel){var el=$(sel);if(el)el.innerHTML=html;});
+}
+document.addEventListener("click",function(e){
+  var c=e.target.closest(".pchip"); if(!c)return;
+  var box=c.parentNode, input=box.nextElementSibling;
+  while(input && input.tagName!=="INPUT") input=input.nextElementSibling;
+  box.querySelectorAll(".pchip").forEach(function(x){if(x!==c)x.classList.remove("on");});
+  c.classList.toggle("on");
+  if(input)input.value=c.classList.contains("on")?c.getAttribute("data-pn"):"";
+});
+
+/* ================= 发完火之后 ================= */
+function afterSync(){
+  var f=$("#af1").value.trim(), v=$("#af3").value.trim();
+  $("#afFact").textContent=f||"(写完上面第①格,这里会显示)";
+  $("#afVerdict").textContent=v||"(写完上面第③格,这里会显示)";
+}
+["af1","af3"].forEach(function(i){var el=$("#"+i);if(el)el.addEventListener("input",afterSync);});
+
+/* ================= Session 之后三行 ================= */
+function renderSA(){
+  var el=$("#saLog"); if(!el)return;
+  if(!db.sessions.length){el.innerHTML="";return;}
+  el.innerHTML='<div style="margin-top:12px">'+db.sessions.slice(0,6).map(function(r){
+    return '<div class="log"><div class="lt"><span>'+shortDate(r.ts)+' · session 之后</span><button class="del" data-delsa="'+r.id+'">✕</button></div>'+
+      (r.land?'<div>🪂 '+esc(r.land)+'</div>':"")+
+      (r.next?'<div class="tiny">→ 想继续:'+esc(r.next)+'</div>':"")+
+      (r.hw?'<div class="tiny">📌 '+esc(r.hw)+'</div>':"")+'</div>';
+  }).join("")+'</div>';
+  el.querySelectorAll("[data-delsa]").forEach(function(b){
+    b.addEventListener("click",function(){
+      db.sessions=db.sessions.filter(function(x){return x.id!==b.getAttribute("data-delsa");});
+      save();renderSA();
+    });
+  });
+}
+
+/* ================= 翻历史 ================= */
+var hqFilter="all";
+var HQF=[{k:"all",t:"全部"},{k:"ci",t:"🫧 check-in"},{k:"tr",t:"🏷 炸点"},{k:"ag",t:"🌋 愤怒"},{k:"ev",t:"🗄 证据"},{k:"sf",t:"🫂 撑不住"}];
+function allEntries(){
+  var out=[];
+  db.checkins.forEach(function(r){
+    out.push({k:"ci",id:r.id,ts:r.ts,star:r.star,
+      text:[(r.body||[]).join(" "),(r.words||[]).join(" "),r.note||""].join(" "),
+      html:'🫧 '+((r.body||[]).length?'📍'+esc(r.body.join("·"))+' ':"")+(r.words||[]).map(function(w){return '<span class="chip">'+esc(w)+'</span>';}).join("")+(r.note?'<div>'+esc(r.note)+'</div>':"")});
+  });
+  db.trails.forEach(function(r){
+    out.push({k:"tr",id:r.id,ts:r.ts,star:r.star,text:[r.event,r.body,r.part].join(" "),
+      html:'🏷 '+esc(r.event||"")+'<div class="tiny">'+esc([r.body,r.size?"大小"+r.size:"",r.part?"像:"+r.part:""].filter(Boolean).join(" · "))+'</div>'});
+  });
+  db.anger.forEach(function(r){
+    var t=[r.to,r.body,r.note,r.a1,r.a2,r.a3,r.a4,r.fact,r.verdict,r.who].filter(Boolean).join(" ");
+    var h='🌋 ';
+    if(r.type==="letter")h+='给'+esc(r.to||"某人")+'的信 · '+esc((r.body||"").slice(0,60));
+    else if(r.type==="burned")h+='写了一封信,烧掉了';
+    else if(r.type==="ask")h+='保护者访谈 · '+esc([r.a1,r.a2,r.a3].filter(Boolean).join(" / ").slice(0,70));
+    else if(r.type==="after")h+='发完火之后 · 审判者:'+esc(r.who||"说不清")+'<div class="tiny">'+esc((r.verdict||"").slice(0,70))+'</div>';
+    else h+='记了一笔 '+esc(r.note||"");
+    out.push({k:"ag",id:r.id,ts:r.ts,star:r.star,text:t,html:h});
+  });
+  db.evidence.forEach(function(r){out.push({k:"ev",id:r.id,ts:r.ts,star:r.star,text:[r.text,r.tag].join(" "),html:'🗄 '+esc(r.text)+(r.tag?'<div class="tiny">反驳「'+esc(r.tag)+'」</div>':"")});});
+  db.soft.forEach(function(r){out.push({k:"sf",id:r.id,ts:r.ts,star:r.star,text:r.text,html:'🫂 '+esc(r.text)});});
+  return out.sort(function(a,b){return b.ts-a.ts;});
+}
+function renderHistory(){
+  var box=$("#hqFilters"); if(!box)return;
+  box.innerHTML=HQF.map(function(f){return '<button class="filt'+(hqFilter===f.k?" on":"")+'" data-hqf="'+f.k+'">'+f.t+'</button>';}).join("");
+  box.querySelectorAll("[data-hqf]").forEach(function(b){
+    b.addEventListener("click",function(){hqFilter=b.getAttribute("data-hqf");renderHistory();});
+  });
+  var qs=($("#hqInput").value||"").trim();
+  var list=allEntries().filter(function(e){return hqFilter==="all"||e.k===hqFilter;});
+  if(qs)list=list.filter(function(e){return (e.text||"").indexOf(qs)>=0;});
+  var st=$("#hqStats");
+  if(qs){
+    var days=list.length?Math.round((Date.now()-list[list.length-1].ts)/86400000):0;
+    st.innerHTML='<div class="card teal flat"><p style="margin:0;font-size:14.5px">「<b>'+esc(qs)+'</b>」出现 <b>'+list.length+'</b> 次'+
+      (list.length?' · 最近一次 '+fmt(list[0].ts)+' · 最早 '+shortDate(list[list.length-1].ts)+'(约 '+days+' 天前)':"")+'</p></div>';
+  } else st.innerHTML='<p class="tiny">共 '+list.length+' 条。这里不截断,全都在。</p>';
+  var out=$("#hqOut");
+  if(!list.length){out.innerHTML='<div class="empty">没找到。<br>换个词试试,或者本来就还没记过。</div>';return;}
+  out.innerHTML=list.slice(0,300).map(function(e){
+    var h=e.html;
+    if(qs){try{h=h.replace(new RegExp(qs.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"g"),'<span class="hitword">'+esc(qs)+'</span>');}catch(err){}}
+    return '<div class="log'+(e.star?" starred":"")+'"><div class="lt"><span>'+fmt(e.ts)+'</span><button class="star'+(e.star?" on":"")+'" data-star="'+e.k+':'+e.id+'" title="标记:带去 session">⭐</button></div>'+h+'</div>';
+  }).join("");
+}
+if($("#hqInput")){
+  $("#hqInput").addEventListener("input",renderHistory);
+  $("#hqClear").addEventListener("click",function(){$("#hqInput").value="";renderHistory();});
+}
+
+/* ================= 星标 ================= */
+var STARMAP={ci:"checkins",ag:"anger",tr:"trails",ev:"evidence",sf:"soft"};
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-star]"); if(!b)return;
+  var p=b.getAttribute("data-star").split(":");
+  var arr=db[STARMAP[p[0]]]||[];
+  arr.forEach(function(x){if(x.id===p[1])x.star=!x.star;});
+  save();
+  b.classList.toggle("on");
+  var row=b.closest(".log"); if(row)row.classList.toggle("starred");
+  toast(b.classList.contains("on")?"⭐ 标了 · 周报会放在最上面":"取消标记");
+});
+
 /* ================= 启动 ================= */
-loadCfg();renderCrisisMine();renderCiLog();renderAgLog();renderTrLog();renderEvLog();
+["roster","sessions","soft"].forEach(function(k){if(!Array.isArray(db[k]))db[k]=[];});
+loadCfg();renderCrisisMine();renderCiLog();renderAgLog();renderTrLog();renderEvLog();renderRoster();renderPartChips();renderSA();
 if("serviceWorker" in navigator){
   window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
 }
